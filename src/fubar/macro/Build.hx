@@ -1,7 +1,6 @@
 package fubar.macro;
 
 #if macro
-
 import haxe.macro.Compiler;
 import haxe.macro.Context;
 import haxe.macro.Expr;
@@ -11,8 +10,11 @@ import om.io.FileSync;
 import Sys.println;
 
 using haxe.io.Path;
+#end
 
 class Build {
+
+	#if macro
 
 	static inline var OUT = 'out';
 
@@ -85,6 +87,11 @@ class Build {
 		var build = new Build();
 		build.start();
     }
-}
 
-#end
+	#end
+
+	macro public static function getGiphyAPIKey() {
+		var key = StringTools.trim( sys.io.File.getContent( 'GIPHY_API_KEY' ) );
+		return macro $v{key};
+	}
+}

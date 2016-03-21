@@ -26,9 +26,10 @@ class App {
 			limit: 5
 		};
 
-		service = new fubar.Service( "dc6zaTOxFJmzC" );
+		service = new fubar.Service( fubar.macro.Build.getGiphyAPIKey() );
 
 		new fubar.app.IntroActivity().boot();
+		//Activity().boot( IntroActivity );
 	}
 
 	static function main() {
