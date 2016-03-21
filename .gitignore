@@ -1,0 +1,6 @@
+_*
+.samba
+data/*.zip
+out/
+GIPHY_API_KEY
+TODO.md

@@ -1,0 +1,12 @@
+-js fubar.js
+-cp src
+-cp ../../lib/om.app/src
+-cp ../../lib/om.core/src
+-cp ../../lib/om.html/src
+-cp ../../lib/om.io/src
+-cp ../../lib/om.input/src
+-cp ../../lib/om.web/src
+-main fubar.App
+-dce full
+-D name=fubar
+--macro fubar.macro.Build.app()

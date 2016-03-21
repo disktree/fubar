@@ -1,0 +1,16 @@
+core.hxml
+-D version=3.0.0
+-D platform=android
+
+#-js out/android/fubar.js
+#-main fubar.App
+#-cp src
+#-cp ../../lib/om.app/src
+#-cp ../../lib/om.core/src
+#-cp ../../lib/om.html/src
+#-cp ../../lib/om.io/src
+#-dce full
+#-D name=fubar
+#-D version=3.0.0
+#-D platform=android
+#--macro fubar.macro.Build.app()

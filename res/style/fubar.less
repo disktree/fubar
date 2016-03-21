@@ -1,0 +1,537 @@
+
+//@import "/home/tong/dev/lib/om.style/res/style/vignette";
+
+@c-0: #000;
+@c-1: #fff;
+
+@font-size: 20px;
+
+////////////////////////////////////////////////////////////////////////////////
+
+@font-face{
+    font-family: 'Roboto';
+    src: url('font/Roboto-Medium.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face{
+    font-family: 'Helvetica';
+    src: url('font/Helvetica Neue 65 Medium.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+html, body {
+    width: 100%;
+    height: 100%;
+    min-width: 100%;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+
+    overflow: hidden;
+
+    font-family: Roboto;
+    font-size: 14px;
+
+    background: @c-0;
+    color: @c-1;
+
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-tap-highlight-color: transparent;
+}
+
+img {
+    //-webkit-user-drag: none;
+    //-webkit-user-select: none;
+    //-moz-user-select: none;
+}
+
+input, select, option {
+    font-family: Roboto;
+    //font-size: @font-size;
+    outline: none;
+    border: none;
+    color: @c-1;
+}
+
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+    display: none;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+#intro.activity {
+
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    //background: @c-0;
+    z-index: 100000;
+
+    img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        max-width: 640px;
+        max-height: 60%;
+        animation: fadeOut 0.2s ease-out 2.2s 1 both;
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+@keyframes item_inc {
+    from { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@keyframes item_out {
+    from { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+.player {
+
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+	.background {
+		background: #000;
+		position: absolute;
+        width: 100%;
+        height: 100%;
+	}
+
+    .items {
+
+		z-index: 1;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+
+        .item {
+            img {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+				-webkit-user-select: none;
+            }
+            //img.gif {}
+            //img.still {}
+        }
+        .item.inc {
+			opacity: 0;
+            animation: item_inc 0.3s ease-out 0.11s 1 both;
+        }
+        .item.out {
+            animation: item_out 1s ease-out 0s 1 both;
+        }
+    }
+
+    .controls {
+
+        position: fixed;
+        top: 0; right: 0; bottom: 0; left: 0;
+        pointer-events: none;
+        z-index: 2;
+
+        .menu {
+
+            position: fixed;
+            z-index: 10;
+            pointer-events: all;
+
+            img.button {
+                display: inline-block;
+                float: left;
+                width: 32px;
+                height: 32px;
+                padding: 6px;
+                cursor: pointer;
+            }
+        }
+
+        .menu.mode {
+
+            top: 0px;
+            left: 0px;
+
+            input[type="search"] {
+
+                display: inline-block;
+                float: left;
+                width: 30px;
+                min-width: 30px;
+                max-width: 400px;
+                padding: 10px 0px 7px 2px;
+
+                font-family: Roboto;
+                font-size: 20px;
+                text-transform: uppercase;
+
+                background: none;
+                //background: rgba(255,0,0,0.5);
+            }
+
+			.clear {
+				display: none;
+			}
+        }
+
+        .menu.share {
+            top: 0px;
+            right: 0px;
+        }
+
+        .menu.play {
+        }
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+#play.activity {
+}
+////////////////////////////////////////////////////////////////////////////////
+
+#about.activity {
+
+	overflow: hidden;
+
+	canvas {
+		z-index: 1;
+		width:100%;
+		height: 100%;
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+	}
+
+	img {
+		z-index: 2;
+		position: absolute;
+		top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        max-width: 640px;
+        max-height: 60%;
+        //animation: fadeIn 0.2s ease-out 2.0s 1 both;
+
+	//	box-shadow: 20px 20px 50px rgba(0,0,0,0.4);
+
+	}
+}
+
+
+/*
+#mediaset.activity {
+
+}
+#mediaset.activity img {
+    /*
+    font-size: 16px;
+    display: inline-block;
+    margin-bottom: 8px;
+    width: calc(20% - 4px);
+    margin-right: 8px;
+    text-decoration: none;
+    color: black;
+    * /
+
+}
+#mediaset.activity img:nth-of-type(2n) {
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+#media.activity {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+#media.activity .item {
+    width: 100%;
+    height: 100%;
+}
+#media.activity .item img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+*/
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+/*
+#player {
+
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    display: inline-block;
+
+    background: #fff;
+
+    //overflow: hidden;
+
+    z-index: 1;
+}
+
+#player div.statusbar {
+
+    position: absolute;
+    bottom: 0;
+    left: 0;
+
+    width: 0px;
+    height: 1px;
+    min-height: 1px;
+    max-height: 1px;
+
+    background: #fff;
+    opacity: 0.5;
+    //mix-blend-mode: difference;
+}
+
+#player .container {
+    //width: 100%;
+    //height: 100%;
+}
+#player .container div.item {
+    //opacity: 0;
+}
+#player .container div.item img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+#player .container div.item > img.still {
+    display: inline-block;
+}
+#player .container div.item > img.media {
+    display: none;
+}
+#player .container div.item.playing > img.still {
+    display: none;
+}
+#player .container div.item.playing > img.media {
+    display: inline-block;
+}
+
+@keyframes itemIn {
+    from { opacity: 0; }
+    100% { opacity: 1; }
+}
+#player .container div.item.in  {
+    //opacity: 1;
+    //transition: opacity 0.2s;
+    animation: itemIn 0.36s ease-out 0.11s 1 both;
+}
+
+
+#player .container div.item div.loadbar {
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 100px;
+    height: 10px;
+
+    background: #fff;
+}
+
+#player .container div.item div.info {
+    position: absolute;
+    //top: 0;
+    //right: 0;
+    bottom: 100px;
+    left: 0;
+    font-size: 14px;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+//preloader
+
+////////////////////////////////////////////////////////////////////////////////
+
+@keyframes showControls {
+    from { opacity: 0; transform: translateY(-100%); }
+    100% { opacity: 1; transform: translateY(0%); }
+}
+@keyframes hideControls {
+    from { transform: translateY(0%); }
+    100% { transform: translateY(-100%); }
+}
+
+#controls {
+
+    position: fixed;
+    top: 0; right: 0; bottom: 0; left: 0;
+
+    //mix-blend-mode: exclusion;
+    opacity: 0.9;
+
+    z-index: 1;
+
+    pointer-events: none;
+
+}
+#controls.show {
+    animation: showControls 0.2s ease-out 0s 1 both;
+}
+#controls.hide {
+    animation: hideControls 0.2s ease-in 0s 1 both;
+}
+
+#controls .menu {
+    position: fixed;
+    z-index: 10;
+    pointer-events: all;
+}
+#controls .menu img.button {
+    display: inline-block;
+    float: left;
+    width: 32px;
+    height: 32px;
+    padding: 6px;
+    cursor: pointer;
+}
+
+#controls #menu-play.menu {
+    top: 0px;
+    left: 0px;
+}
+
+#controls #menu-mode.menu {
+    top: 0px;
+    left: 48px;
+}
+#controls #menu-mode.menu input[type="search"] {
+
+    display: inline-block;
+    float: left;
+    width: 30px;
+    min-width: 30px;
+    max-width: 400px;
+    padding: 10px 0px 7px 2px;
+
+    font-family: Roboto;
+    font-size: 20px;
+    text-transform: uppercase;
+
+    background: none;
+    //background: rgba(255,0,0,0.5);
+}
+
+#controls #menu-share.menu {
+    top: 0px;
+    right: 0px;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+/*
+ul.mediawall {
+
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+
+    width: 100%;
+    height: 100%;
+    //height: auto;
+
+    overflow-y: scroll;
+
+    z-index: 10000;
+}
+ul.mediawall li {
+    //perspective: 400px;
+    position: relative;
+    float: left;
+    display:inline-block;
+    overflow: hidden;
+    background: #000;
+    width: 20%;
+    height: 30%;
+}
+* /
+
+////////////////////////////////////////////////////////////////////////////////
+
+#settings {
+
+    display: none;
+
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    overflow-y: scroll;
+
+    background: #000;
+    color: #fff;
+    //background: rgba(0,0,0,0.8);
+    //opacity: 0.95;
+
+    z-index: 100;
+}
+
+#settings.visible {
+    display: block;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+*/
