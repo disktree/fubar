@@ -21,15 +21,16 @@ class Build {
 	var name : String;
 	var version : String;
     var platform : String;
-	var out : String;
 	var debug : Bool;
+	var out : String;
 
 	function new() {
 		name = Context.definedValue( 'name' );
 		version = Context.definedValue( 'version' );
 		platform = Context.definedValue( 'platform' );
-		out = '$OUT/$platform';
 		debug = Context.definedValue( "debug" ) == "1";
+		out = Context.definedValue( 'out' );
+		if( out == null ) out = '$OUT/$platform';
 	}
 
 	function start() {
