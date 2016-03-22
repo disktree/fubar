@@ -1,11 +1,14 @@
 package fubar.ui;
 
+import js.Error;
+import js.Browser.console;
 import js.Browser.document;
 import js.html.Element;
 import js.html.DivElement;
 import js.html.ImageElement;
 import om.Time;
 import om.api.Giphy;
+import fubar.net.ImagePreloader;
 import fubar.ui.player.*;
 import fubar.App.config;
 import fubar.App.service;
@@ -15,15 +18,18 @@ class Player {
     public dynamic function onView( item : om.api.Giphy.Item ) {}
 
     public var element(default,null) : Element;
-    public var backgroundColor(default,set) : String;
     public var index(default,null) : Int;
 	public var controls(default,null) : Controls;
     public var items(default,null) : Array<om.api.Giphy.Item>;
 	public var pagination(default,null)  : Pagination;
 
+	public var backgroundColor(default,set) : String;
+	inline function set_backgroundColor( v : String ) return backgroundColor = element.style.backgroundColor = v;
+
 	var background : DivElement;
     var container : DivElement;
     var currentView : ItemView;
+	var preloader : ImagePreloader;
 
     public function new( backgroundColor = '#000' ) {
 
@@ -84,10 +90,8 @@ class Player {
 			}
 		}
         element.appendChild( controls.element );
-    }
 
-    function set_backgroundColor(v:String) : String {
-        return backgroundColor = element.style.backgroundColor = v;
+		preloader = new ImagePreloader();
     }
 
     public function load( items : Array<om.api.Giphy.Item>, index = 0, ?pagination : Pagination ) {
@@ -98,7 +102,7 @@ class Player {
         this.items = items;
         this.pagination = pagination;
 
-        goto( index );
+		goto( index );
     }
 
     public function goto( i : Int ) {
@@ -119,9 +123,14 @@ class Player {
 
         var newView = new ItemView( item );
         newView.onLoad = function(){
-            //lastImageChangeTime = Time.now();
+
+			//lastImageChangeTime = Time.now();
+
             onView( item );
+
             //TODO preload
+			if( isNext && index < items.length-1 ) preload( items[index+1] );
+			if( isPrev && index > 0 ) preload( items[index-1] );
         }
         container.appendChild( newView.element );
 
@@ -153,9 +162,23 @@ class Player {
             container.removeChild( container.firstChild );
         items = [];
         index = 0;
+		preloader.dispose();
         //lastImageChangeTime = -1;
     }
 
     public function update( time : Float ) {
     }
+
+	function preload( item : om.api.Giphy.Item, ?callback : Error->Void ) {
+		var url = item.images.original.url;
+		preloader.preload( url, callback );
+	}
+
+	/*
+	function preloadRange( start : Int, end : Int, callback : Void->Void ) {
+		for( i in start...end ) {
+			preload( items[i] );
+		}
+	}
+	*/
 }
