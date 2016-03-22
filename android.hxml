@@ -1,4 +1,4 @@
 core.hxml
--D version=3.0.0
--D platform=android
+-D android
 -D out=../fubar-android/assets
+-debug

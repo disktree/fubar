@@ -42,9 +42,9 @@ class ControlMenu {
     }
 
     function createIconButton( id : String ) : ImageElement {
-        var e = document.createImageElement();
-        e.classList.add( 'button', id );
-        e.src = 'image/$id.png';
-        return e;
+        var img = document.createImageElement();
+        img.classList.add( 'button', id );
+        img.src = 'image/ic_$id.png';
+        return img;
     }
 }

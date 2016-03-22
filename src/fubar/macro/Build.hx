@@ -25,10 +25,20 @@ class Build {
 	var out : String;
 
 	function new() {
+
 		name = Context.definedValue( 'name' );
 		version = Context.definedValue( 'version' );
-		platform = Context.definedValue( 'platform' );
+
+		//platform = Context.definedValue( 'platform' );
+		platform =
+			#if android 'android'
+			#elseif chrome 'chrome'
+			#elseif web 'web'
+			#else throw 'no platform specified'
+			#end;
+
 		debug = Context.definedValue( "debug" ) == "1";
+
 		out = Context.definedValue( 'out' );
 		if( out == null ) out = '$OUT/$platform';
 	}
@@ -46,11 +56,13 @@ class Build {
 
 			syncTemplate( 'res/html/index.html', '$out/index.html' );
 
+			/*
 			switch platform {
 				case 'android':
 				case 'chrome':
 				case 'web':
 			}
+			*/
 
 			println( '$name-$version-$platform' );
 		});

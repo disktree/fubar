@@ -18,18 +18,19 @@ class App {
 
 	public static var config(default,null) : fubar.Config;
 	public static var service(default,null) : fubar.Service;
+	//public static var state(default,null) : fubar.State;
 
 	static function init() {
 
 		config = {
 			rating: null,
-			limit: 5
+			limit: 100
 		};
 
 		service = new fubar.Service( fubar.macro.Build.getGiphyAPIKey() );
 
 		new fubar.app.IntroActivity().boot();
-		//Activity().boot( IntroActivity );
+		//new fubar.app.AboutActivity().boot();
 	}
 
 	static function main() {

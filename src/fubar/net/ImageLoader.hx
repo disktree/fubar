@@ -34,7 +34,7 @@ class ImageLoader {
 
     public function abort() {
         if( xhr != null ) {
-            trace( 'Abort image request' );
+            trace( 'aborting image load' );
             xhr.abort();
         }
     }
