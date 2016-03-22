@@ -9,12 +9,19 @@ class Service {
 
     static inline var API_URL = 'http://api.giphy.com/v1/gifs';
 
-    //var giphy : Giphy;
     var apiKey : String;
 
     public function new( apiKey : String ) {
         //giphy = new Giphy( giphyKey );
         this.apiKey = apiKey;
+    }
+
+	public function get( id : String, callback : Error->Item->Void ) {
+		request( '/$id?', function(e,r){
+			if( e != null ) callback(e,null) else {
+				callback( null, r.data );
+			}
+		});
     }
 
     public function random( n : Int ) {
@@ -45,11 +52,17 @@ class Service {
     }
 
     function request<T>( params : String, callback : Error->T->Void ) {
-        var req = new XMLHttpRequest();
-        req.open( 'GET', '$API_URL$params&api_key=$apiKey', true );
-        req.onerror = function(e) callback( e, null );
-        req.onload = function(e) callback( null, Json.parse( req.responseText ) );
-        req.send();
+		var req = new XMLHttpRequest();
+		req.open( 'GET', '$API_URL$params&api_key=$apiKey', true );
+		req.onerror = function(e) callback( e, null );
+		req.onload = function(e) callback( null, Json.parse( req.responseText ) );
+		try {
+			req.send();
+		} catch(e:Dynamic) {
+			trace(e);
+			callback(e,null);
+			return;
+		}
     }
 
 }

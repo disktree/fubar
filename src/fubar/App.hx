@@ -2,7 +2,19 @@ package fubar;
 
 import js.Browser.document;
 import js.Browser.window;
-import om.app.Activity;
+import fubar.app.IntroActivity;
+import om.api.Giphy;
+import fubar.app.ItemActivity;
+
+typedef Config = {
+	var limit : Int;
+	var rating : Rating;
+}
+
+typedef State = {
+	var mode : PlayMode;
+	var search : String;
+}
 
 /*
 //TODO autobuild
@@ -16,9 +28,9 @@ typedef State = {
 //class App implements samba.App {
 class App {
 
-	public static var config(default,null) : fubar.Config;
-	public static var service(default,null) : fubar.Service;
-	//public static var state(default,null) : fubar.State;
+	public static var config(default,null) : Config;
+	public static var service(default,null) : Service;
+	public static var state(default,null) : fubar.State;
 
 	static function init() {
 
@@ -27,11 +39,54 @@ class App {
 			limit: 100
 		};
 
-		service = new fubar.Service( fubar.macro.Build.getGiphyAPIKey() );
+		loadState( function(s){
 
-		new fubar.app.IntroActivity().boot();
-		//new fubar.app.AboutActivity().boot();
+			if( s == null ) {
+				s = {
+					mode: PlayMode.trending,
+					search: null
+				};
+			} else {
+				if( s.search == null || s.search.length == 0 )
+					s.mode = trending;
+			}
+
+			state = s;
+			saveState();
+
+			service = new Service( fubar.macro.Build.getGiphyAPIKey() );
+
+			new fubar.app.PlayActivity( state.mode ).boot();
+
+			/*
+			#if web
+			var params = haxe.web.Request.getParams();
+			if( params.exists( 'id' ) )
+			new ItemActivity( params.get( 'id' ) ).boot();
+			else
+			new IntroActivity().boot();
+			#else
+			new IntroActivity().boot();
+			#end
+
+			*/
+			#if !chrome
+			window.addEventListener( 'beforeunload', handleBeforeUnload, false );
+			#end
+
+		});
 	}
+
+	static function handleBeforeUnload(e) {
+		//js.Browser.getLocalStorage().setItem( 'fubar_state', haxe.Json.stringify(state) );
+        saveState();
+    }
+
+	static inline function loadState( callback : State->Void )
+		Storage.get( 'state', callback );
+
+	static inline function saveState()
+		Storage.set( 'state', App.state );
 
 	static function main() {
 		window.onload = function(){

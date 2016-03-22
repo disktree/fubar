@@ -58,7 +58,7 @@ class Player {
 						if( e != null ) {
 							//TODO
 						} else {
-							load( items );
+							setItems( items );
 						}
 					});
 				case search:
@@ -84,7 +84,7 @@ class Player {
 					if( e != null ) {
 						//TODO
 					} else {
-						load( items );
+						setItems( items );
 					}
 				});
 			}
@@ -94,7 +94,7 @@ class Player {
 		preloader = new ImagePreloader();
     }
 
-    public function load( items : Array<om.api.Giphy.Item>, index = 0, ?pagination : Pagination ) {
+    public function setItems( items : Array<om.api.Giphy.Item>, index = 0, ?pagination : Pagination ) {
 
         if( this.items != null )
             clear();

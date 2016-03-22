@@ -37,6 +37,7 @@ class TouchInput {
     public dynamic function onEnd( e : TouchEvent ) {}
     public dynamic function onGesture( gesture : TouchGesture ) {}
 
+    public var element(default,null) : Element;
     public var enabled : Bool;
     public var threshold : Int;
 
@@ -56,6 +57,15 @@ class TouchInput {
 
         enabled = true;
     }
+
+	public function dispose() {
+
+		enabled = false;
+
+		element.removeEventListener( 'touchstart', handleTouchStart );
+        element.removeEventListener( 'touchmove', handleTouchMove );
+        element.removeEventListener( 'touchend', handleTouchEnd );
+	}
 
     function handleTouchStart( e : TouchEvent ) {
 

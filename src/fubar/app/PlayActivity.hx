@@ -13,6 +13,7 @@ class PlayActivity extends om.app.Activity {
     var mode : PlayMode;
     var player : Player;
     var animationFrameId : Int;
+
     var touchInput : TouchInput;
 
     public function new( mode : PlayMode ) {
@@ -26,26 +27,55 @@ class PlayActivity extends om.app.Activity {
 
         player = new Player();
         element.append( player.element );
-
     }
 
     override function onStart() {
 
         super.onStart();
 
-        //TODO show preloader
+		//TODO show preloader
 
-        service.trending( config.limit, config.rating, function(e,items){
-            if( e != null ) {
-                //TODO
-            } else {
-                player.load( items );
-            }
-        });
+		switch mode {
+		case trending:
+			loadTrendingItems();
+		case search:
+			//loadItems();
+		default:
+			loadItem( mode );
+		}
 
-        window.addEventListener( 'keydown', handleKeyDown, false );
+		/*
+		trace(mode);
+
+		#if web
+		var params = haxe.web.Request.getParams();
+		if( params.exists( 'id' ) ) {
+			loadItem( params.get( 'id' ) );
+		} else
+			loadTrendingItems();
+
+		#else
+		loadTrending();
+
+		#end
+
+
+		#if android
 		touchInput = new TouchInput( player.element );
 		touchInput.onGesture = handleTouchGesture;
+
+		#elseif chrome
+
+		#elseif web
+		if( om.System.supportsTouchInput() ) {
+			touchInput = new TouchInput( player.element );
+			touchInput.onGesture = handleTouchGesture;
+		} else {
+		}
+		#end
+		*/
+
+		window.addEventListener( 'keydown', handleKeyDown, false );
 
         animationFrameId = window.requestAnimationFrame( update );
     }
@@ -56,8 +86,40 @@ class PlayActivity extends om.app.Activity {
 
         window.cancelAnimationFrame( animationFrameId );
 
+		touchInput.dispose();
+
         window.removeEventListener( 'keydown', handleKeyDown );
     }
+
+	function loadItem( id : String ) {
+		service.get( id, function(e,item){
+			if( e != null ) {
+				//TODO
+			} else {
+				player.setItems( [item] );
+			}
+		});
+	}
+
+	function loadItems( q : Array<String> ) {
+		service.trending( config.limit, config.rating, function(e,items){
+			if( e != null ) {
+				//TODO
+			} else {
+				player.setItems( items );
+			}
+		});
+	}
+
+	function loadTrendingItems() {
+		service.trending( config.limit, config.rating, function(e,items){
+			if( e != null ) {
+				//TODO
+			} else {
+				player.setItems( items );
+			}
+		});
+	}
 
     function update( time : Float ) {
 		animationFrameId = window.requestAnimationFrame( update );
