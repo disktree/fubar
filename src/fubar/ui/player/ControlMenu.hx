@@ -35,7 +35,10 @@ class ControlMenu {
         isVisible ? hide() : show();
     }
 
-    function addIconButton( id : String ) : ImageElement {
+	public function dispose() {
+	}
+
+	function addIconButton( id : String ) : ImageElement {
         var e = createIconButton( id );
         element.appendChild( e );
         return e;

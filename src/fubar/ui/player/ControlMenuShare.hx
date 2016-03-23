@@ -81,6 +81,12 @@ class ControlMenuShare extends ControlMenu {
         */
     }
 
+	/*
+	public override function dispose() {
+		super.dispose();
+	}
+	*/
+
     function set_item( item : om.api.Giphy.Item ) {
 
         var sourceUrl = item.source_post_url;

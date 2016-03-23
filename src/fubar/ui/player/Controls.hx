@@ -56,4 +56,9 @@ class Controls {
     public function toggle() {
         isVisible ? hide() : show();
     }
+
+	public function dispose() {
+		mode.dispose();
+		share.dispose();
+	}
 }

@@ -58,6 +58,14 @@ class ControlMenuMode extends ControlMenu {
         //setMode( App.settings.mode );
     }
 
+	public override function dispose() {
+
+		super.dispose();
+
+		searchInput.removeEventListener( 'input', handleSearchInput );
+        searchInput.removeEventListener( 'search', handleSearchEnter );
+	}
+
     function setMode( mode : PlayMode ) {
         switch mode {
         case trending:
