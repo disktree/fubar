@@ -23,15 +23,23 @@ typedef State = {
 }
 */
 
+@:build(fubar.macro.BuildApp.build())
 class App {
 
 	public static inline var VERSION = '3.0.0';
 
+	public static var isMobile(default,null) : Bool;
 	public static var config(default,null) : Config;
 	public static var service(default,null) : Service;
 	//public static var state(default,null) : fubar.State;
 
 	static inline function init() {
+
+		#if android
+		isMobile = true;
+		#else
+		isMobile = om.System.isMobile();
+		#end
 
 		service = new Service( fubar.macro.Build.getGiphyAPIKey() );
 
@@ -47,12 +55,17 @@ class App {
 					rating: null,
 					limit: 100,
 					autoplay: 7,
-					maxGifSize: 4*1024*1024,
+					maxGifSize: (isMobile ? 2 : 3) * 1024 * 1024,
 				}
 				saveConfig();
 			}
 
-			new fubar.app.PlayActivity( trending ).boot( container );
+			//new fubar.app.PlayActivity( trending ).boot( container );
+			new fubar.app.IntroActivity().boot( container );
+
+			#if !chrome
+			window.addEventListener( 'beforeunload', handleBeforeUnload, false );
+			#end
 
 			/*
 			loadState( function(s){

@@ -6,6 +6,7 @@ import om.api.Giphy;
 import fubar.gui.Player;
 import fubar.gui.TouchInput;
 import fubar.gui.Tetroid;
+import fubar.gui.player.ControlMenuMode;
 import fubar.App.config;
 import fubar.App.service;
 
@@ -33,6 +34,47 @@ class PlayActivity extends om.app.Activity {
     override function onStart() {
 
         super.onStart();
+
+		player.controls.mode.onChange = function(change:PlaySettingsChange){
+			switch change {
+			case PlaySettingsChange.mode(m):
+				switch m {
+				case trending:
+					service.trending( config.limit, config.rating, function(e,items){
+						if( e != null ) {
+							//TODO
+						} else {
+							player.setItems( items );
+						}
+					});
+				case search:
+					//currentView.style.display = 'none';
+					var term = player.controls.mode.searchTerm;
+					if( term.length == 0 ) {
+						trace("NO INPUT");
+					} else {
+
+					}
+					/*
+					service.search( 10, function(e,items){
+						if( e != null ) {
+							//TODO
+						} else {
+							load( items );
+						}
+					});
+					*/
+				}
+			case PlaySettingsChange.search(term):
+				service.search( [term], config.limit, config.rating, function(e,items){
+					if( e != null ) {
+						//TODO
+					} else {
+						player.setItems( items );
+					}
+				});
+			}
+		}
 
 		switch mode {
 		case trending:
@@ -100,32 +142,36 @@ class PlayActivity extends om.app.Activity {
 
 	function loadItem( id : String ) {
 		service.get( id, function(e,item){
-			if( e != null ) {
-				//TODO
-			} else {
-				player.setItems( [item] );
-			}
+			handleItemsLoad( e, [item] );
 		});
 	}
 
 	function loadItems( q : Array<String> ) {
-		service.trending( config.limit, config.rating, function(e,items){
-			if( e != null ) {
-				//TODO
-			} else {
-				player.setItems( items );
-			}
-		});
+		service.trending( config.limit, config.rating, handleItemsLoad );
 	}
 
 	function loadTrendingItems() {
-		service.trending( config.limit, config.rating, function(e,items){
-			if( e != null ) {
-				//TODO
-			} else {
-				player.setItems( items );
+		service.trending( config.limit, config.rating, handleItemsLoad );
+	}
+
+	//function handleItemsLoad( items : Array<Item> ) {
+	function handleItemsLoad( e : om.Error, items : Array<Item> ) {
+		if( e != null ) {
+			//TODO
+		} else {
+			var itemsReceived = items.length;
+			var i = 0;
+			for( item in items ) {
+				if( Std.parseInt( item.images.original.size ) > App.config.maxGifSize ) {
+					//trace( 'max gif size exceeded '+item.images.original.size+' '+item.images.original.url );
+                	items.splice(i,1);
+				}
+				i++;
 			}
-		});
+			var itemsFiltered = itemsReceived - items.length;
+			if( itemsFiltered > 0 ) trace( itemsFiltered+' items filtered' );
+			player.setItems( items );
+		}
 	}
 
     function update( time : Float ) {

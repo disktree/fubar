@@ -74,49 +74,6 @@ class Player {
         element.appendChild( container );
 
         controls = new Controls();
-		controls.play.onChange = function(yes) {
-
-		}
-		controls.mode.onChange = function(change) {
-			switch change {
-			case mode(m):
-				switch m {
-				case trending:
-					service.trending( config.limit, config.rating, function(e,items){
-						if( e != null ) {
-							//TODO
-						} else {
-							setItems( items );
-						}
-					});
-				case search:
-					//currentView.style.display = 'none';
-					var term = controls.mode.searchTerm;
-					if( term.length == 0 ) {
-						trace("NO INPUT");
-					} else {
-
-					}
-					/*
-					service.search( 10, function(e,items){
-						if( e != null ) {
-							//TODO
-						} else {
-							load( items );
-						}
-					});
-					*/
-				}
-			case search(term):
-				service.search( [term], config.limit, config.rating, function(e,items){
-					if( e != null ) {
-						//TODO
-					} else {
-						setItems( items );
-					}
-				});
-			}
-		}
         element.appendChild( controls.element );
 
 		preloader = new ImagePreloader();
@@ -169,7 +126,7 @@ class Player {
 
         var item = items[index];
 
-		trace(item);
+		//trace(item);
 
 		if( nextView != null ) {
 			nextView.remove( true );
