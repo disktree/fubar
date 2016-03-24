@@ -1,4 +1,4 @@
-package fubar.ui.player;
+package fubar.gui.player;
 
 import js.Browser.document;
 import js.Browser.window;

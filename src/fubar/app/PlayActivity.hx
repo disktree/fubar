@@ -3,11 +3,11 @@ package fubar.app;
 import js.Browser.window;
 import om.input.Keycode;
 import om.api.Giphy;
-import fubar.ui.Player;
-import fubar.ui.TouchInput;
+import fubar.gui.Player;
+import fubar.gui.TouchInput;
+import fubar.gui.Tetroid;
 import fubar.App.config;
 import fubar.App.service;
-import fubar.ui.Tetroid;
 
 class PlayActivity extends om.app.Activity {
 

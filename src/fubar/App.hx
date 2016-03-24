@@ -12,13 +12,16 @@ typedef Config = {
 	var limit : Int;
 	var rating : Rating;
 	var autoplay : Int;
+	var maxGifSize : Int;
 }
 
+/*
 typedef State = {
 	var mode : PlayMode;
 	var search : String;
 	var autoplay : Bool;
 }
+*/
 
 class App {
 
@@ -43,7 +46,8 @@ class App {
 					version: VERSION,
 					rating: null,
 					limit: 100,
-					autoplay: 7
+					autoplay: 7,
+					maxGifSize: 4*1024*1024,
 				}
 				saveConfig();
 			}

@@ -1,4 +1,4 @@
-package fubar.ui;
+package fubar.gui;
 
 import js.Error;
 import js.Browser.console;
@@ -9,7 +9,7 @@ import js.html.ImageElement;
 import om.Time;
 import om.api.Giphy;
 import fubar.net.ImagePreloader;
-import fubar.ui.player.*;
+import fubar.gui.player.*;
 import fubar.App.config;
 import fubar.App.service;
 
