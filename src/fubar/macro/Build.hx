@@ -64,6 +64,17 @@ class Build {
 			}
 			*/
 
+			#if android
+
+			#elseif chrome
+			syncTemplate( 'res/chrome/manifest.json', '$out/manifest.json' );
+			FileSync.syncFile( 'res/chrome/background.js', '$out/background.js' );
+
+			#elseif web
+			syncTemplate( 'res/web/manifest.json', '$out/manifest.json' );
+
+			#end
+
 			println( '$name-$version-$platform' );
 		});
 	}
