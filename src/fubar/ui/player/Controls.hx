@@ -9,18 +9,22 @@ class Controls {
     //public dynamic function onInput<T>( key : String, value : T ) {}
 
     public var element(default,null) : Element;
-    public var isVisible(default,null) : Bool;
+    public var hidden(default,null) : Bool;
 
     public var mode(default,null) : ControlMenuMode;
-    //public var play(default,null) : ControlMenuPlay;
+    public var play(default,null) : ControlMenuAutoplay;
     public var share(default,null) : ControlMenuShare;
+
+	var menus : Array<ControlMenu>;
 
     public function new() {
 
-        isVisible = false;
+        hidden = false;
+
+		menus = [];
 
         element = document.createDivElement();
-        element.classList.add( 'controls' );
+        element.classList.add( 'controls', 'shown' );
         /*
         element.addEventListener( 'animationend', function(e){
             switch e.animationName {
@@ -30,35 +34,37 @@ class Controls {
         }, false );
         */
 
-        //this.play = new ControlMenuPlay( false );
-        //element.appendChild( play.element );
-
-        this.mode = new ControlMenuMode();
-        element.appendChild( mode.element );
-
-        this.share = new ControlMenuShare();
-        element.appendChild( share.element );
+		this.play = addControlMenu( new ControlMenuAutoplay() );
+		this.mode = addControlMenu( new ControlMenuMode() );
+		this.share = addControlMenu( new ControlMenuShare() );
     }
 
     public function show() {
-        isVisible = true;
-        //element.style.display = 'block';
-        element.classList.add( 'show' );
-        element.classList.remove( 'hide' );
+		hidden = false;
+		element.classList.add( 'shown' );
+        element.classList.remove( 'hidden' );
+		for( m in menus ) m.show();
     }
 
     public function hide() {
-        isVisible = false;
-        element.classList.remove( 'show' );
-        element.classList.add( 'hide' );
+        hidden = true;
+		element.classList.remove( 'shown' );
+		element.classList.add( 'hidden' );
+		for( m in menus ) m.hide();
     }
 
-    public function toggle() {
-        isVisible ? hide() : show();
+    public inline function toggle() {
+        hidden ? show() : hide();
     }
 
 	public function dispose() {
-		mode.dispose();
-		share.dispose();
+		for( m in menus ) m.dispose();
+		menus = [];
+	}
+
+	function addControlMenu<T:ControlMenu>( menu : T ) : T {
+		element.appendChild( menu.element );
+		menus.push( menu );
+		return menu;
 	}
 }

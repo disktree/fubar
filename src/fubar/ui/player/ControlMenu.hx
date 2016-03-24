@@ -10,29 +10,31 @@ import js.html.ImageElement;
 */
 class ControlMenu {
 
+	public var hidden(default,null) : Bool;
     public var element(default,null) : Element;
-    public var isVisible(default,null) : Bool;
 
     function new( id : String ) {
 
-        element = document.createDivElement();
-        element.classList.add( 'menu', id, 'visible' );
+		hidden = false;
 
-        isVisible = true;
+        element = document.createDivElement();
+        element.classList.add( 'menu', id, 'shown' );
     }
 
     public function show() {
-        isVisible = true;
-        element.classList.add( 'visible' );
+        hidden = false;
+        element.classList.add( 'shown' );
+        element.classList.remove( 'hidden' );
     }
 
     public function hide() {
-        isVisible = false;
-        element.classList.remove( 'visible' );
+        hidden = true;
+		element.classList.remove( 'shown' );
+        element.classList.add( 'hidden' );
     }
 
-    public function toggle() {
-        isVisible ? hide() : show();
+    public inline function toggle() {
+        hidden ? show() : hide();
     }
 
 	public function dispose() {

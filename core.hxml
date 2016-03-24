@@ -1,4 +1,5 @@
 -js fubar.js
+-lib thx.semver
 -cp src
 -cp ../../lib/om.app/src
 -cp ../../lib/om.core/src

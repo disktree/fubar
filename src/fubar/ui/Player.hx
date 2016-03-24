@@ -18,11 +18,14 @@ class Player {
     public dynamic function onView( item : om.api.Giphy.Item ) {}
 
     public var element(default,null) : Element;
+    public var container(default,null) : DivElement;
     public var index(default,null) : Int;
     public var items(default,null) : Array<om.api.Giphy.Item>;
 	public var pagination(default,null)  : Pagination;
-	public var input(default,null)  : TouchInput;
 	public var controls(default,null) : Controls;
+	//public var input(default,null)  : TouchInput;
+	//public var rating : Rating;
+	//public var limit : Int;
 
 	public var autoplay(default,set) : Int;
 	function set_autoplay(v:Int) {
@@ -42,18 +45,22 @@ class Player {
 	inline function set_backgroundColor( v : String ) return backgroundColor = element.style.backgroundColor = v;
 
 	var background : DivElement;
-    var container : DivElement;
+
     var currentView : ItemView;
+	var nextView : ItemView;
 	var preloader : ImagePreloader;
 	var lastImageChangeTime : Float;
 
-    public function new( autoplay = 0, backgroundColor = '#000' ) {
+    //public function new( ?autoplay = 0, ?rating : Rating, ?limit : Int, backgroundColor = '#000' ) {
+    public function new( ?autoplay = 0, backgroundColor = '#000' ) {
 
         element = document.createDivElement();
         element.classList.add( 'player' );
 
         this.backgroundColor = backgroundColor;
         this.autoplay = autoplay;
+        //this.rating = rating;
+        //this.limit = limit;
 
         index = 0;
 		lastImageChangeTime = 0;
@@ -63,10 +70,13 @@ class Player {
         element.appendChild( background );
 
         container = document.createDivElement();
-        container.classList.add( 'items' );
+        container.classList.add( 'media' );
         element.appendChild( container );
 
         controls = new Controls();
+		controls.play.onChange = function(yes) {
+
+		}
 		controls.mode.onChange = function(change) {
 			switch change {
 			case mode(m):
@@ -111,28 +121,25 @@ class Player {
 
 		preloader = new ImagePreloader();
 
-		var touchX = 0;
+		//var touchX = 0;
 		//var touchY = 0;
 
-		input = new TouchInput( element );
+		//input = new TouchInput( element );
+		//input.onGesture = handleTouchGesture;
+		/*
 		input.onStart = function(e){
 			var touch = e.touches[0];
 			touchX = touch.pageX;
-			//touchY = touch.pageY;
-            //trace( touch.pageX+":"+touch.pageY );
 		}
 		input.onMove = function(e){
 			var touch = e.touches[0];
 			var dx = touch.pageX - touchX;
 			currentView.element.style.left = dx+'px';
-			//touchX = touch.pageX;
-            //trace( touch.pageX+":"+touch.pageY );
 		}
 		input.onEnd = function(e){
 			currentView.element.classList.add( 'back_to_init' );
-			//var touch = e.touches[0];
-            //trace( touch.pageX+":"+touch.pageY );
 		}
+		*/
     }
 
     public function setItems( items : Array<om.api.Giphy.Item>, index = 0, ?pagination : Pagination ) {
@@ -162,10 +169,19 @@ class Player {
 
         var item = items[index];
 
-        var newView = new ItemView( item );
-        newView.onLoad = function(){
+		trace(item);
 
+		if( nextView != null ) {
+			nextView.remove( true );
+		}
+
+        nextView = new ItemView( item );
+        nextView.onLoad = function(){
+
+			nextView = null;
 			lastImageChangeTime = Time.now();
+
+			controls.share.item = item;
 
             onView( item );
 
@@ -173,13 +189,13 @@ class Player {
 			if( isNext && index < items.length-1 ) preload( items[index+1] );
 			if( isPrev && index > 0 ) preload( items[index-1] );
         }
-        container.appendChild( newView.element );
+        container.appendChild( nextView.element );
 
         if( currentView != null ) {
             currentView.remove();
         }
 
-        currentView = newView;
+        currentView = nextView;
     }
 
     public function prev() {
@@ -204,7 +220,7 @@ class Player {
         items = [];
         index = 0;
 		preloader.dispose();
-        //lastImageChangeTime = -1;
+        lastImageChangeTime = 0;
     }
 
     public function update( time : Float ) {
@@ -218,13 +234,15 @@ class Player {
     }
 
 	public function dispose() {
+		//input.dispose();
+		if( currentView != null ) currentView.remove( true );
+		if( nextView != null ) nextView.remove( true );
 		controls.dispose();
-		input.dispose();
     }
 
 	function preload( item : om.api.Giphy.Item, ?callback : Error->Void ) {
 		var url = item.images.original.url;
-		trace( 'preloading: '+url );
+		//trace( 'preloading: '+url );
 		preloader.preload( url, callback );
 	}
 

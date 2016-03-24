@@ -35,29 +35,35 @@ class ControlMenuShare extends ControlMenu {
         element.appendChild( linkWeb );
 
         buttonDownload = createIconButton( 'download' );
+
         #if web
         linkDownload = document.createAnchorElement();
         linkDownload.appendChild( buttonDownload );
         element.appendChild( linkDownload );
+
         #elseif android
         buttonDownload.onclick = function() {
             if( item != null ) {
-                #if android
+                //#if android
                 var file = 'giphy-'+item.id+'.gif';
                 untyped AndroidApp.downloadImage( item.images.original.url, file, item.images.original.url, file );
-                #end
+                //#end
             }
         };
         element.appendChild( buttonDownload );
+
         #end
 
         buttonShare = addIconButton( 'share' );
         buttonShare.onclick = function(_) {
             if( item != null ) {
+
                 #if android
                 untyped AndroidApp.shareImage( item.images.original.url );
-                #else
+
+				#else
                 window.open( item.bitly_url, '_blank' );
+
                 #end
             }
         }
@@ -88,7 +94,6 @@ class ControlMenuShare extends ControlMenu {
 	*/
 
     function set_item( item : om.api.Giphy.Item ) {
-
         var sourceUrl = item.source_post_url;
         if( sourceUrl == null || sourceUrl.length == 0 ) {
             linkWeb.href = null;
@@ -111,7 +116,7 @@ class ControlMenuShare extends ControlMenu {
         linkDownload.download = item.id+'.gif';
         #end
 
-        if( isVisible ) element.classList.add( 'visible' );
+        //if( !hidden ) element.classList.add( 'visible' );
 
         return this.item = item;
     }

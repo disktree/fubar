@@ -58,6 +58,8 @@ class TouchInput {
         enabled = true;
     }
 
+	//public function init() {
+
 	public function dispose() {
 
 		enabled = false;

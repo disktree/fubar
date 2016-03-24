@@ -7,14 +7,15 @@ import fubar.ui.Player;
 import fubar.ui.TouchInput;
 import fubar.App.config;
 import fubar.App.service;
+import fubar.ui.Tetroid;
 
 class PlayActivity extends om.app.Activity {
 
     var mode : PlayMode;
     var player : Player;
     var animationFrameId : Int;
-
     var touchInput : TouchInput;
+	//var tetroid : Tetroid;
 
     public function new( mode : PlayMode ) {
         super();
@@ -25,7 +26,7 @@ class PlayActivity extends om.app.Activity {
 
         super.onCreate();
 
-        player = new Player();
+        player = new Player( config.autoplay );
         element.append( player.element );
     }
 
@@ -33,20 +34,17 @@ class PlayActivity extends om.app.Activity {
 
         super.onStart();
 
-		//TODO show preloader
-
 		switch mode {
 		case trending:
 			loadTrendingItems();
 		case search:
+			//TODO
 			//loadItems();
 		default:
 			loadItem( mode );
 		}
 
 		/*
-		trace(mode);
-
 		#if web
 		var params = haxe.web.Request.getParams();
 		if( params.exists( 'id' ) ) {
@@ -56,16 +54,12 @@ class PlayActivity extends om.app.Activity {
 
 		#else
 		loadTrending();
-
 		#end
-
 
 		#if android
 		touchInput = new TouchInput( player.element );
 		touchInput.onGesture = handleTouchGesture;
-
 		#elseif chrome
-
 		#elseif web
 		if( om.System.supportsTouchInput() ) {
 			touchInput = new TouchInput( player.element );
@@ -74,6 +68,19 @@ class PlayActivity extends om.app.Activity {
 		}
 		#end
 		*/
+
+		/*
+		tetroid = new Tetroid( 40, 4, '#e0e0e0', 4 );
+		tetroid.canvas.classList.add( 'tetroid' );
+		tetroid.context.lineWidth = 1;
+		element.append( tetroid.canvas );
+		*/
+
+		touchInput = new TouchInput( player.container );
+		touchInput.onGesture = handleTouchGesture;
+		//touchInput.onStart = handleTouchStart;
+
+		container.addEventListener( 'click', handleClickContainer, false );
 
 		window.addEventListener( 'keydown', handleKeyDown, false );
 
@@ -86,7 +93,7 @@ class PlayActivity extends om.app.Activity {
 
         window.cancelAnimationFrame( animationFrameId );
 
-		touchInput.dispose();
+		//touchInput.dispose();
 
         window.removeEventListener( 'keydown', handleKeyDown );
     }
@@ -127,13 +134,16 @@ class PlayActivity extends om.app.Activity {
     }
 
 	function handleTouchGesture( gesture : TouchGesture ) {
+		trace(gesture);
 		switch gesture {
         case tap:
             player.controls.toggle();
         case up(v):
+			player.controls.show();
             //TODO show image info
             //player.showImageInfo();
         case down(v):
+			player.controls.hide();
             //TODO hide image info
             //player.showImageInfo();
         case left(v):
@@ -141,6 +151,14 @@ class PlayActivity extends om.app.Activity {
         case right(v):
             player.prev();
         }
+	}
+
+	function handleClickContainer(e) {
+		if( e.pageX < window.innerWidth/2 ) {
+			player.prev();
+		} else {
+			player.next();
+		}
 	}
 
     function handleKeyDown(e) {

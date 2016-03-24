@@ -10,6 +10,7 @@ class Service {
     static inline var API_URL = 'http://api.giphy.com/v1/gifs';
 
     var apiKey : String;
+	//var pending : Map<String,XMLHttpRequest>;
 
     public function new( apiKey : String ) {
         //giphy = new Giphy( giphyKey );
@@ -50,6 +51,8 @@ class Service {
             }
         });
     }
+
+	//public function abortAll() {}
 
     function request<T>( params : String, callback : Error->T->Void ) {
 		var req = new XMLHttpRequest();
