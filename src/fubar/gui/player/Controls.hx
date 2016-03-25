@@ -17,7 +17,7 @@ class Controls {
 
 	var menus : Array<ControlMenu>;
 
-    public function new() {
+    public function new( autoplay : Bool ) {
 
         hidden = false;
 
@@ -34,7 +34,7 @@ class Controls {
         }, false );
         */
 
-		this.play = addControlMenu( new ControlMenuAutoplay() );
+		this.play = addControlMenu( new ControlMenuAutoplay( autoplay ) );
 		this.mode = addControlMenu( new ControlMenuMode() );
 		this.share = addControlMenu( new ControlMenuShare() );
     }

@@ -111,6 +111,8 @@ class ControlMenuMode extends ControlMenu {
     }
 
 	function handleClearClick(e) {
+		e.stopPropagation();
+		e.preventDefault();
 		setSearchText( '' );
 		searchInput.focus();
 	}

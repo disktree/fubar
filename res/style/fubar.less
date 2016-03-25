@@ -63,12 +63,10 @@ body {
 }
 
 img {
-    //-webkit-user-drag: none;
-    //-webkit-user-select: none;
-    //-moz-user-select: none;
+	-webkit-touch-callout: none;
 	-webkit-user-drag: none;
 	user-drag: none;
-	-webkit-touch-callout: none;
+	//-webkit-user-select: none;
 }
 
 input, select, option {
@@ -89,6 +87,7 @@ input[type="search"]::-webkit-search-results-decoration {
 ////////////////////////////////////////////////////////////////////////////////
 
 @media screen only and (orientation:portrait) {
+	// TODO
 	.player {
 		opacity: 0.2;
 	}
@@ -113,8 +112,8 @@ input[type="search"]::-webkit-search-results-decoration {
     right: 0;
     bottom: 0;
     left: 0;
-    //background: @c-0;
-    z-index: 100000;
+
+    z-index: 1000;
 
     img {
         position: absolute;
@@ -160,11 +159,16 @@ input[type="search"]::-webkit-search-results-decoration {
     bottom: 0;
     left: 0;
 
+	z-index: 100;
+
 	.background {
+
 		position: absolute;
         width: 100%;
         height: 100%;
 		background: #000;
+
+		z-index: 101;
 	}
 
     .media {
@@ -172,7 +176,7 @@ input[type="search"]::-webkit-search-results-decoration {
         position: absolute;
         width: 100%;
         height: 100%;
-		z-index: 1;
+		z-index: 102;
 
         .item {
 
@@ -236,134 +240,116 @@ input[type="search"]::-webkit-search-results-decoration {
 		}
 		*/
     }
+}
 
-    .controls {
+.controls {
 
-        position: fixed;
-		right: 0;
-		//bottom: @controls-size-outter + 10;
-		left: 0;
-    	pointer-events: none;
-        z-index: 2;
-		//transition: transform 0.4s;
+	position: fixed;
+	right: 0;
+	//bottom: @controls-size-outter + 10;
+	left: 0;
+	pointer-events: none;
 
-        .menu {
+	z-index: 200;
+	//transition: transform 0.4s;
 
-            position: fixed;
-            z-index: 10;
-            pointer-events: all;
+	.menu {
 
-            img.button {
-                display: inline-block;
-                float: left;
-                width: @controls-size-inner;
-                height: @controls-size-inner;
-                padding: 6px 10px 6px 10px;
-                cursor: pointer;
-				//background: #ff0000;
-            }
+		position: fixed;
+		z-index: 201;
+		pointer-events: all;
 
-			transition: transform 0.2s;
-        }
-
-		.menu.shown {
-			//animation: item_controls_show 0.2s ease-in-out 0s 1 both;
-			//transform: translate(0,0);
-		}
-		.menu.hidden {
-			//animation: item_controls_hide 0.2s ease-in-out 0s 1 both;
-			//transform: translate(0,100%);
+		img.button {
+			display: inline-block;
+			float: left;
+			width: @controls-size-inner;
+			height: @controls-size-inner;
+			padding: 6px 10px 6px 10px;
+			cursor: pointer;
+			//background: #ff0000;
 		}
 
-		.menu.autoplay {
-			top: 0px;
-		}
+		transition: transform 0.2s;
+	}
 
-        .menu.mode {
-
-            //top: 0px;
-            left: @controls-size-outter;
-
-            input[type="search"] {
-
-                display: inline-block;
-                float: left;
-                width: 30px;
-                min-width: 30px;
-                max-width: 400px;
-                padding: 10px 0px 7px 2px;
-
-                font-family: Roboto;
-                font-size: 20px;
-                text-transform: uppercase;
-
-                background: none;
-            }
-
-			.clear {
-				//opacity: 0;
-				display: none;
-				position: relative;
-				left: -14px;
-				transition: opacity 0.15s;
-			}
-        }
-
-        .menu.share {
-            //top: 0px;
-            right: 0px;
-        }
-    }
-
-	.controls.shown {
+	.menu.shown {
+		//animation: item_controls_show 0.2s ease-in-out 0s 1 both;
 		//transform: translate(0,0);
 	}
-	.controls.hidden {
+	.menu.hidden {
+		//animation: item_controls_hide 0.2s ease-in-out 0s 1 both;
 		//transform: translate(0,100%);
 	}
 
+	.menu.autoplay {
+		bottom: 2px;
+	}
+
+	.menu.mode {
+
+		top: 2px;
+		//left: @controls-size-outter;
+
+		input[type="search"] {
+
+			display: inline-block;
+			float: left;
+			width: 30px;
+			min-width: 30px;
+			max-width: 400px;
+			padding: 10px 0px 7px 2px;
+
+			font-family: Roboto;
+			font-size: 20px;
+			text-transform: uppercase;
+
+			background: none;
+		}
+
+		.clear {
+			//opacity: 0;
+			display: none;
+			position: relative;
+			left: -14px;
+			transition: opacity 0.15s;
+		}
+	}
+
+	.menu.share {
+		top: 2px;
+		right: 2px;
+	}
+}
+
+.controls.shown {
+	//transform: translate(0,0);
+}
+.controls.hidden {
+	//transform: translate(0,100%);
+}
+
+.statusbar {
+
+	position: absolute;
+	bottom: 0;
+	left: 0;
+
+	width: 0px;
+	height: 1px;
+	min-height: 1px;
+	max-height: 1px;
+
+	background: #fff;
+	opacity: 0.5;
+	//mix-blend-mode: difference;
+
+	z-index: 103;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 #play.activity {
 }
-
-////////////////////////////////////////////////////////////////////////////////
-
-/*
-#item.activity {
-
-	position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-
-	img {
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		min-width: 100%;
-		min-height: 100%;
-	}
-
-	img.gif.scale-fit {
-	}
-
-	img.gif.scale-letterbox {
-	}
-
-	img.gif.scale-original {
-		margin-left: auto;
-    	margin-right: auto;
-		width:inherit;
-		vertical-align: middle;
-	}
-}
-*/
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -435,287 +421,3 @@ input[type="search"]::-webkit-search-results-decoration {
 
     z-index: 5;
 }
-
-////////////////////////////////////////////////////////////////////////////////
-
-/*
-#mediaset.activity {
-
-}
-#mediaset.activity img {
-    /*
-    font-size: 16px;
-    display: inline-block;
-    margin-bottom: 8px;
-    width: calc(20% - 4px);
-    margin-right: 8px;
-    text-decoration: none;
-    color: black;
-    * /
-
-}
-#mediaset.activity img:nth-of-type(2n) {
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-#media.activity {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-}
-#media.activity .item {
-    width: 100%;
-    height: 100%;
-}
-#media.activity .item img {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-}
-*/
-
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-
-/*
-#player {
-
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-
-    width: 100%;
-    height: 100%;
-
-    display: inline-block;
-
-    background: #fff;
-
-    //overflow: hidden;
-
-    z-index: 1;
-}
-
-#player div.statusbar {
-
-    position: absolute;
-    bottom: 0;
-    left: 0;
-
-    width: 0px;
-    height: 1px;
-    min-height: 1px;
-    max-height: 1px;
-
-    background: #fff;
-    opacity: 0.5;
-    //mix-blend-mode: difference;
-}
-
-#player .container {
-    //width: 100%;
-    //height: 100%;
-}
-#player .container div.item {
-    //opacity: 0;
-}
-#player .container div.item img {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-}
-#player .container div.item > img.still {
-    display: inline-block;
-}
-#player .container div.item > img.media {
-    display: none;
-}
-#player .container div.item.playing > img.still {
-    display: none;
-}
-#player .container div.item.playing > img.media {
-    display: inline-block;
-}
-
-@keyframes itemIn {
-    from { opacity: 0; }
-    100% { opacity: 1; }
-}
-#player .container div.item.in  {
-    //opacity: 1;
-    //transition: opacity 0.2s;
-    animation: itemIn 0.36s ease-out 0.11s 1 both;
-}
-
-
-#player .container div.item div.loadbar {
-
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    width: 100px;
-    height: 10px;
-
-    background: #fff;
-}
-
-#player .container div.item div.info {
-    position: absolute;
-    //top: 0;
-    //right: 0;
-    bottom: 100px;
-    left: 0;
-    font-size: 14px;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-//preloader
-
-////////////////////////////////////////////////////////////////////////////////
-
-@keyframes showControls {
-    from { opacity: 0; transform: translateY(-100%); }
-    100% { opacity: 1; transform: translateY(0%); }
-}
-@keyframes hideControls {
-    from { transform: translateY(0%); }
-    100% { transform: translateY(-100%); }
-}
-
-#controls {
-
-    position: fixed;
-    top: 0; right: 0; bottom: 0; left: 0;
-
-    //mix-blend-mode: exclusion;
-    opacity: 0.9;
-
-    z-index: 1;
-
-    pointer-events: none;
-
-}
-#controls.show {
-    animation: showControls 0.2s ease-out 0s 1 both;
-}
-#controls.hide {
-    animation: hideControls 0.2s ease-in 0s 1 both;
-}
-
-#controls .menu {
-    position: fixed;
-    z-index: 10;
-    pointer-events: all;
-}
-#controls .menu img.button {
-    display: inline-block;
-    float: left;
-    width: 32px;
-    height: 32px;
-    padding: 6px;
-    cursor: pointer;
-}
-
-#controls #menu-play.menu {
-    top: 0px;
-    left: 0px;
-}
-
-#controls #menu-mode.menu {
-    top: 0px;
-    left: 48px;
-}
-#controls #menu-mode.menu input[type="search"] {
-
-    display: inline-block;
-    float: left;
-    width: 30px;
-    min-width: 30px;
-    max-width: 400px;
-    padding: 10px 0px 7px 2px;
-
-    font-family: Roboto;
-    font-size: 20px;
-    text-transform: uppercase;
-
-    background: none;
-    //background: rgba(255,0,0,0.5);
-}
-
-#controls #menu-share.menu {
-    top: 0px;
-    right: 0px;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-/*
-ul.mediawall {
-
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-
-    margin: 0;
-    padding: 0;
-
-    list-style: none;
-
-    width: 100%;
-    height: 100%;
-    //height: auto;
-
-    overflow-y: scroll;
-
-    z-index: 10000;
-}
-ul.mediawall li {
-    //perspective: 400px;
-    position: relative;
-    float: left;
-    display:inline-block;
-    overflow: hidden;
-    background: #000;
-    width: 20%;
-    height: 30%;
-}
-* /
-
-////////////////////////////////////////////////////////////////////////////////
-
-#settings {
-
-    display: none;
-
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-
-    overflow-y: scroll;
-
-    background: #000;
-    color: #fff;
-    //background: rgba(0,0,0,0.8);
-    //opacity: 0.95;
-
-    z-index: 100;
-}
-
-#settings.visible {
-    display: block;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-*/

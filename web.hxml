@@ -1,3 +1,6 @@
 core.hxml
 -D web
+-D desktop
+-D mobile
+-D touch_device
 -debug

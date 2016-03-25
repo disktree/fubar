@@ -1,6 +1,6 @@
 package fubar.net;
 
-import js.Error;
+import om.Error;
 import js.html.ImageElement;
 import js.html.XMLHttpRequest;
 

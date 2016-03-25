@@ -1,11 +1,15 @@
 package fubar.app;
 
+import js.Browser.document;
 import js.Browser.window;
+import js.html.DivElement;
 import om.input.Keycode;
+import om.Time.now;
 import om.api.Giphy;
 import fubar.gui.Player;
 import fubar.gui.TouchInput;
 import fubar.gui.Tetroid;
+import fubar.gui.player.Controls;
 import fubar.gui.player.ControlMenuMode;
 import fubar.App.config;
 import fubar.App.service;
@@ -14,9 +18,15 @@ class PlayActivity extends om.app.Activity {
 
     var mode : PlayMode;
     var player : Player;
-    var animationFrameId : Int;
+	var statusbar : DivElement;
+    var controls : Controls;
     var touchInput : TouchInput;
-	//var tetroid : Tetroid;
+
+	var timeLastImageChange : Float;
+	var timeLastUpdate : Float;
+	var timeImageShown : Float;
+	var timePauseStart : Float;
+	var timeInvisibleStart : Float;
 
     public function new( mode : PlayMode ) {
         super();
@@ -27,52 +37,59 @@ class PlayActivity extends om.app.Activity {
 
         super.onCreate();
 
-        player = new Player( config.autoplay );
+        player = new Player();
         element.append( player.element );
+
+		controls = new Controls( false);
+        element.append( controls.element );
+
+		statusbar = document.createDivElement();
+        statusbar.classList.add( 'statusbar' );
+        element.append( statusbar );
     }
 
     override function onStart() {
 
         super.onStart();
 
-		player.controls.mode.onChange = function(change:PlaySettingsChange){
+		timeLastImageChange = 0;
+		timeLastUpdate = now();
+		timeImageShown = 0;
+		timePauseStart = 0;
+
+		player.onView = function(item){
+			timeLastImageChange = now();
+		}
+
+		controls.mode.onChange = function(change:PlaySettingsChange){
 			switch change {
 			case PlaySettingsChange.mode(m):
 				switch m {
 				case trending:
-					service.trending( config.limit, config.rating, function(e,items){
-						if( e != null ) {
-							//TODO
-						} else {
-							player.setItems( items );
-						}
-					});
+					loadTrendingItems();
 				case search:
-					//currentView.style.display = 'none';
-					var term = player.controls.mode.searchTerm;
+					var term = controls.mode.searchTerm;
 					if( term.length == 0 ) {
-						trace("NO INPUT");
+						trace( "no search input", 'debug' );
 					} else {
-
+						var terms = ~/(\\s+)/.split( term );
+						loadItems( term.split('') );
 					}
-					/*
-					service.search( 10, function(e,items){
-						if( e != null ) {
-							//TODO
-						} else {
-							load( items );
-						}
-					});
-					*/
 				}
 			case PlaySettingsChange.search(term):
-				service.search( [term], config.limit, config.rating, function(e,items){
-					if( e != null ) {
-						//TODO
-					} else {
-						player.setItems( items );
-					}
-				});
+				var terms = ~/(\s+)/.split( term );
+				loadItems( terms );
+			}
+		}
+		controls.play.onChange = function(play){
+			if( play ) {
+				if( timePauseStart > 0 ) {
+					//timeOffset += now() - timePauseStart;
+					timeImageShown -= now() - timePauseStart;
+					timePauseStart = 0;
+				}
+			} else {
+				timePauseStart = now();
 			}
 		}
 
@@ -111,39 +128,53 @@ class PlayActivity extends om.app.Activity {
 		#end
 		*/
 
-		/*
-		tetroid = new Tetroid( 40, 4, '#e0e0e0', 4 );
-		tetroid.canvas.classList.add( 'tetroid' );
-		tetroid.context.lineWidth = 1;
-		element.append( tetroid.canvas );
-		*/
-
 		touchInput = new TouchInput( player.container );
 		touchInput.onGesture = handleTouchGesture;
 		//touchInput.onStart = handleTouchStart;
 
-		container.addEventListener( 'click', handleClickContainer, false );
-
+		//container.addEventListener( 'click', handleClickContainer, false );
+		player.element.addEventListener( 'dblclick', handleDoubleClickPlayer, false );
 		window.addEventListener( 'keydown', handleKeyDown, false );
-
-        animationFrameId = window.requestAnimationFrame( update );
+		document.addEventListener( 'visibilitychange', handleVisibilityChange, false );
     }
 
     override function onStop() {
 
         super.onStop();
 
-        window.cancelAnimationFrame( animationFrameId );
+		//timeOffset = 0;
 
-		//touchInput.dispose();
+		touchInput.dispose();
 
+		//container.removeEventListener( 'click', handleClickContainer );
+		player.element.removeEventListener( 'dblclick', handleDoubleClickPlayer );
         window.removeEventListener( 'keydown', handleKeyDown );
+		document.removeEventListener( 'visibilitychange', handleVisibilityChange );
+    }
+
+	override function update( time : Float ) {
+
+		if( !document.hidden ) {
+
+			timeImageShown += time - timeLastUpdate;
+
+			if( controls.play.autoplay ) {
+				if( timeImageShown/1000 >= config.autoplay ) {
+					timeImageShown = 0;
+					statusbar.style.width = '0px';
+					player.next();
+				} else {
+					var percent = timeImageShown / config.autoplay / 10;
+					statusbar.style.width =  Std.int( window.innerWidth * percent / 100 ) + 'px';
+				}
+			}
+		}
+
+		timeLastUpdate = time;
     }
 
 	function loadItem( id : String ) {
-		service.get( id, function(e,item){
-			handleItemsLoad( e, [item] );
-		});
+		service.get( id, function(e,i) handleItemsLoad( e, [i] ) );
 	}
 
 	function loadItems( q : Array<String> ) {
@@ -154,7 +185,6 @@ class PlayActivity extends om.app.Activity {
 		service.trending( config.limit, config.rating, handleItemsLoad );
 	}
 
-	//function handleItemsLoad( items : Array<Item> ) {
 	function handleItemsLoad( e : om.Error, items : Array<Item> ) {
 		if( e != null ) {
 			//TODO
@@ -168,28 +198,23 @@ class PlayActivity extends om.app.Activity {
 				}
 				i++;
 			}
-			var itemsFiltered = itemsReceived - items.length;
-			if( itemsFiltered > 0 ) trace( itemsFiltered+' items filtered' );
-			player.setItems( items );
+			var filtered = itemsReceived - items.length;
+			if( filtered > 0 ) trace( filtered+' items filtered' );
+			player.load( items );
 		}
 	}
 
-    function update( time : Float ) {
-		animationFrameId = window.requestAnimationFrame( update );
-        player.update( time );
-    }
-
 	function handleTouchGesture( gesture : TouchGesture ) {
-		trace(gesture);
+		//trace(gesture);
 		switch gesture {
         case tap:
-            player.controls.toggle();
+            controls.toggle();
         case up(v):
-			player.controls.show();
+			controls.show();
             //TODO show image info
             //player.showImageInfo();
         case down(v):
-			player.controls.hide();
+			controls.hide();
             //TODO hide image info
             //player.showImageInfo();
         case left(v):
@@ -207,6 +232,10 @@ class PlayActivity extends om.app.Activity {
 		}
 	}
 
+	function handleDoubleClickPlayer(e) {
+		om.app.Window.toggleFullscreen();
+	}
+
     function handleKeyDown(e) {
         //trace(e.keyCode);
         switch e.keyCode {
@@ -216,6 +245,18 @@ class PlayActivity extends om.app.Activity {
         case arrow_down:
         case arrow_left:
             player.prev();
+        }
+    }
+
+	function handleVisibilityChange(e) {
+        if( document.hidden ) {
+			if( controls.play.autoplay )
+				timeInvisibleStart = now();
+        } else {
+			if( timeInvisibleStart > 0 ) {
+				timeImageShown -= now() - timeInvisibleStart;
+				timeInvisibleStart = 0;
+			}
         }
     }
 }

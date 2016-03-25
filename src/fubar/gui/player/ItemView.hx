@@ -53,6 +53,7 @@ class ItemView {
 		still.src = item.images.original_still.url;
         element.appendChild( still );
 
+		/*
 		if( item.caption != null ) {
 			var caption = document.createDivElement();
 			caption.classList.add( 'caption' );
@@ -68,6 +69,7 @@ class ItemView {
 			slug.textContent = slugs.join(' | ');
 			element.appendChild( slug );
 		}
+		*/
 
 		loader = new fubar.net.ImageLoader();
         loader.onProgress = function(t,l) {

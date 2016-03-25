@@ -8,18 +8,15 @@ class ControlMenuAutoplay extends ControlMenu {
 
     public dynamic function onChange( autoplay : Bool ) {}
 
-    //public var busy(null,set) : Bool;
+    public var autoplay(default,null) : Bool;
 
-    var autoplay : Bool;
     var buttonPlay : ImageElement;
     var buttonPause : ImageElement;
     var preload : ImageElement;
 
-    public function new() {
+    public function new( autoplay : Bool ) {
 
         super( 'autoplay' );
-
-		//Autoplay = autoplay;
 
         buttonPlay = addIconButton( 'play' );
         buttonPause = addIconButton( 'pause' );
@@ -27,13 +24,19 @@ class ControlMenuAutoplay extends ControlMenu {
         //preload = addIconButton( 'preloader' );
         //preload.style.display = 'none';
 
-        //set( state.autoplay );
-        set( false );
+        set( autoplay );
 
         element.addEventListener( 'click', handleClick, false );
     }
 
+	public override function dispose() {
+		super.dispose();
+		element.removeEventListener( 'click', handleClick );
+	}
+
     function handleClick(e) {
+		e.stopPropagation();
+		e.preventDefault();
         set( !autoplay );
     }
 

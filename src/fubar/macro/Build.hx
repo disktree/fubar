@@ -8,15 +8,21 @@ import sys.io.File;
 import sys.FileSystem.*;
 import om.io.FileSync;
 import Sys.println;
-
 using haxe.io.Path;
 #end
 
 class Build {
 
+	macro public static function getGiphyAPIKey() {
+		var key = StringTools.trim( sys.io.File.getContent( 'GIPHY_API_KEY' ) );
+		return macro $v{key};
+	}
+
 	#if macro
 
 	static inline var OUT = 'out';
+
+	//static var context : Context;
 
 	var name : String;
 	var version : String;
@@ -114,8 +120,4 @@ class Build {
 
 	#end
 
-	macro public static function getGiphyAPIKey() {
-		var key = StringTools.trim( sys.io.File.getContent( 'GIPHY_API_KEY' ) );
-		return macro $v{key};
-	}
 }
