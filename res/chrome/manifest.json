@@ -16,8 +16,8 @@
         "storage"
     ],
     "icons": {
-        "16": "icon/fubar_16.png",
-        "48": "icon/fubar_48.png",
-        "128": "icon/fubar_128.png"
+        "16": "icon/fubar-16.png",
+        "48": "icon/fubar-48.png",
+        "128": "icon/fubar-128.png"
     }
 }

@@ -73,10 +73,12 @@ class Build {
 			#if android
 
 			#elseif chrome
-			syncTemplate( 'res/chrome/manifest.json', '$out/manifest.json' );
+			FileSync.syncDirectory( 'res/icon', '$out/icon' );
 			FileSync.syncFile( 'res/chrome/background.js', '$out/background.js' );
+			syncTemplate( 'res/chrome/manifest.json', '$out/manifest.json' );
 
 			#elseif web
+			FileSync.syncDirectory( 'res/icon', '$out/icon' );
 			syncTemplate( 'res/web/manifest.json', '$out/manifest.json' );
 
 			#end
