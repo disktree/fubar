@@ -6,4 +6,4 @@ Animated GIF Television Channel.
 
 ![http://giphy.com/](data/fubar-icon-512.png)
 
-![http://giphy.com/](data/giphy-logo.png)
+[![Giphy](data/giphy-logo.png)](http://giphy.com/)
