@@ -30,37 +30,27 @@ class App {
 
 	public static inline var VERSION = '3.0.0';
 
-	//public static var time(default,null) : Float;
 	public static var isMobile(default,null) : Bool;
 	public static var config(default,null) : Config;
 	public static var service(default,null) : Service;
 	//public static var state(default,null) : fubar.State;
 
 	static var animationFrameId : Int;
-	//static var time : Float;
-	//static var timeStart : Float;
-	//static var timePauseStart : Float;
-	//static var timeOffset : Float;
 
-	static inline function init( config : Config ) {
+	static inline function init( cfg : Config ) {
 
-		if( config == null ) {
-			config = {
+		if( cfg == null || cfg.version != VERSION ) {
+			cfg = {
 				version: VERSION,
 				rating: null,
-				limit: 100,
+				limit: 500,
 				autoplay: 7,
 				maxGifSize: (isMobile ? 2 : 3) * 1024 * 1024,
 			}
 			saveConfig();
 		}
 
-		App.config = config;
-
-		//time = 0;
-		//timeStart = Time.now();
-		//timePauseStart = 0;
-		//timeOffset = 0;
+		App.config = cfg;
 
 		#if android
 		isMobile = true;
@@ -74,12 +64,12 @@ class App {
 		container.id = 'fubar';
 		document.body.appendChild( container );
 
-		//new fubar.app.PlayActivity( trending ).boot( container );
 		new fubar.app.IntroActivity().boot( container );
 
 		#if !chrome
 		window.addEventListener( 'beforeunload', handleBeforeUnload, false );
 		#end
+		window.addEventListener( 'contextmenu', handleContextMenu, false );
 
 		animationFrameId = window.requestAnimationFrame( update );
 	}
@@ -87,14 +77,11 @@ class App {
 
 	static function update( time : Float ) {
 		animationFrameId = window.requestAnimationFrame( update );
-		//App.time = Time.now() - timeOffset;
-		//om.app.Activity.current.update( Time.now() - timeOffset );
-		//time = Time.now() - timeStart;
 		om.app.Activity.current.update( Time.now() );
 	}
 
 	static function end() {
-		//cancelAnimationFrame();
+		cancelAnimationFrame();
 	}
 
 	/*
@@ -113,6 +100,12 @@ class App {
         }
     }
 	*/
+
+	static function handleContextMenu(e) {
+        #if web
+        e.preventDefault();
+        #end
+    }
 
 	static function handleBeforeUnload(e) {
 		cancelAnimationFrame();
@@ -134,8 +127,8 @@ class App {
 	//static inline function saveState() Storage.set( 'state', App.state );
 
 	static function _trace( v : Dynamic, ?info : haxe.PosInfos ) {
-		#if debug
-		var str = info.fileName+':'+info.lineNumber+': '+v;
+		var str = info.fileName+':'+info.lineNumber;
+		str += ': '+v;
 		if( info.customParams != null && info.customParams.length > 0 ) {
 			switch info.customParams[0] {
 				case 'log': console.log( str );
@@ -148,7 +141,6 @@ class App {
 		} else {
 			console.log( str );
 		}
-		#end
 	}
 
 	static function main() {

@@ -36,12 +36,20 @@ class Build {
 		version = Context.definedValue( 'version' );
 
 		//platform = Context.definedValue( 'platform' );
-		platform =
+		platform = Context.definedValue( 'platform' );
+		/*
 			#if android 'android'
 			#elseif chrome 'chrome'
 			#elseif web 'web'
 			#else throw 'no platform specified'
 			#end;
+			*/
+
+		if( platform == null ) {
+			Context.error( 'No platform specified', Context.currentPos() );
+		}
+
+		Compiler.define( platform, '1' );
 
 		debug = Context.definedValue( "debug" ) == "1";
 

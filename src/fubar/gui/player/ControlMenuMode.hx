@@ -68,18 +68,16 @@ class ControlMenuMode extends ControlMenu {
             trendingButton.style.display = 'inline-block';
             searchButton.style.display = 'none';
             searchInput.style.display = 'none';
-            //searchClear.style.display = 'none';
-
+            searchClear.style.display = 'none';
         case search:
             trendingButton.style.display = 'none';
             searchButton.style.display = 'inline-block';
             searchInput.style.display = 'inline-block';
             if( searchInput.value.length == 0 ) {
-                searchClear.style.opacity = 'none';
+                searchClear.style.display = 'none';
                 searchInput.focus();
             } else {
                 searchClear.style.display = 'inline-block';
-				//searchClear.style.opacity = '1';
             }
         }
     }

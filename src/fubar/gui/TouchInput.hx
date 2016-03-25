@@ -73,8 +73,8 @@ class TouchInput {
 
         if( !enabled ) return;
 
-        e.preventDefault();
-        e.stopPropagation();
+    //    e.preventDefault();
+    //    e.stopPropagation();
 
         if( e.touches != null ) {
 

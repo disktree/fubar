@@ -3,70 +3,113 @@ package fubar.gui.player;
 import js.Browser.document;
 import js.Browser.window;
 import js.html.AnchorElement;
+import js.html.DivElement;
 import js.html.ImageElement;
+import js.html.SpanElement;
 
 using StringTools;
 
 class ControlMenuShare extends ControlMenu {
 
     public var item(default,set) : om.api.Giphy.Item;
+	function set_item(n:om.api.Giphy.Item) {
 
-    var buttonLink : ImageElement;
-    var buttonDownload : ImageElement;
-    var buttonShare : ImageElement;
+		item = n;
 
-    var linkWeb : AnchorElement;
+		if( item == null ) {
 
-    #if web
-    var linkDownload : AnchorElement;
-    #elseif chrome
-    //var buttonWallpaper : ImageElement;
-    #end
+			optLink.href = null;
+
+			optDownload.href = null;
+			optDownload.download = null;
+
+			optShare.style.display = 'none';
+			optLink.style.display = 'none';
+			optDownload.style.display = 'none';
+
+		} else {
+			var sourceUrl = item.source_post_url;
+			if( sourceUrl == null || sourceUrl.length == 0 ) {
+				optLink.href = null;
+				optLink.style.display = 'none';
+			} else {
+				optLink.href = sourceUrl;
+				optLink.style.display = 'inline-block';
+				var icon =
+		            if( sourceUrl.indexOf( 'reddit.com' ) != -1 ) 'reddit';
+		            else if( sourceUrl.indexOf( 'tumblr.com' ) != -1 ) 'tumblr';
+		            else if( sourceUrl.indexOf( 'youtube.com' ) != -1 ) 'youtube';
+		            else 'link';
+				untyped optLink.children[0].src = 'image/ic_$icon.png';
+			}
+
+			#if web
+			optDownload.href = item.images.original.url;
+			optDownload.download = 'giphy-'+item.id+'.gif';
+			#end
+		}
+
+		return item;
+	}
+
+	var isMenuOpen : Bool;
+
+	var more : ImageElement;
+	var menu : DivElement;
+	var optDownload : AnchorElement;
+	var optLink : AnchorElement;
+	var optShare : AnchorElement;
+
+	#if chrome
+	//var buttonWallpaper : ImageElement;
+	#end
 
     public function new() {
 
         super( 'share' );
 
-        buttonLink = createIconButton( 'link' );
+		isMenuOpen = false;
 
-        linkWeb = document.createAnchorElement();
-        linkWeb.target = '_blank';
-        linkWeb.appendChild( buttonLink );
-        element.appendChild( linkWeb );
+		menu = document.createDivElement();
+		menu.classList.add( 'menu' );
+		element.appendChild( menu );
 
-        buttonDownload = createIconButton( 'download' );
+		optShare = addMenuOption( 'share', function(){
 
-        #if web
-        linkDownload = document.createAnchorElement();
-        linkDownload.appendChild( buttonDownload );
-        element.appendChild( linkDownload );
+			if( item != null ) {
 
-        #elseif android
-        buttonDownload.onclick = function() {
-            if( item != null ) {
-                //#if android
-                var file = 'giphy-'+item.id+'.gif';
-                untyped AndroidApp.downloadImage( item.images.original.url, file, item.images.original.url, file );
-                //#end
-            }
-        };
-        element.appendChild( buttonDownload );
-
-        #end
-
-        buttonShare = addIconButton( 'share' );
-        buttonShare.onclick = function(_) {
-            if( item != null ) {
-
-                #if android
-                untyped AndroidApp.shareImage( item.images.original.url );
+				#if android
+				untyped AndroidApp.shareImage( item.images.original.url );
 
 				#else
-                window.open( item.bitly_url, '_blank' );
+				//TODO show sub menu buttons for twitter,g+,facebook,...
+				window.open( item.bitly_url, '_blank' );
 
-                #end
-            }
-        }
+				#end
+			}
+		});
+
+		optLink = addMenuOption( 'link', function(){});
+		optLink.target = '_blank';
+
+		optDownload =
+			#if android
+			addMenuOption( 'download', function(){
+				#if android
+				var file = 'giphy-'+item.id+'.gif';
+				untyped AndroidApp.downloadImage( item.images.original.url, file, item.images.original.url, file );
+				#end
+			});
+			#else
+			addMenuOption( 'download' );
+			#end
+
+		more = createIconButton( 'more_vert' );
+		more.onclick = toggleMenu;
+		element.appendChild( more );
+
+		//document.body.addEventListener( 'click', handleClickBody, false );
+		//document.body.addEventListener( 'touchstart', handleClickBody, false );
 
         /*
         #if chrome
@@ -87,50 +130,56 @@ class ControlMenuShare extends ControlMenu {
         */
     }
 
-	/*
-	public override function dispose() {
-		super.dispose();
+	public function openMenu() : Bool {
+		isMenuOpen = true;
+		menu.style.display = 'inline-block';
+		return true;
 	}
-	*/
 
-    function set_item( item : om.api.Giphy.Item ) {
-        var sourceUrl = item.source_post_url;
-        if( sourceUrl == null || sourceUrl.length == 0 ) {
-            linkWeb.href = null;
-            linkWeb.style.visibility = 'hidden';
-        } else {
-            linkWeb.href = sourceUrl;
-            linkWeb.style.visibility = 'visible';
-            /*
-            //if( item.source_post_url.startsWith( 'http://www.reddit.com' ) ) {
-            var icon =
-                if( url.indexOf( 'reddit.com' ) != -1 ) 'reddit';
-                else if( url.indexOf( 'tumblr.com' ) != -1 ) 'tumblr';
-                else 'link';
-            buttonLink.src = 'image/$icon.png';
-            */
-        }
+	public function closeMenu() : Bool {
+		isMenuOpen = false;
+		menu.style.display = 'none';
+		return false;
+	}
 
-        #if web
-        linkDownload.href = item.images.original.url;
-        linkDownload.download = item.id+'.gif';
-        #end
+	public inline function toggleMenu() : Bool {
+		return isMenuOpen ? closeMenu() : openMenu();
+	}
 
-        //if( !hidden ) element.classList.add( 'visible' );
+	public override function dispose() {
 
-        return this.item = item;
-    }
+		super.dispose();
 
-    public function clear() {
+		document.body.removeEventListener( 'click', handleClickBody );
+		document.body.removeEventListener( 'touchstart', handleClickBody );
 
-        item = null;
+		menu.remove();
+		more.remove();
+	}
 
-        linkWeb.href = null;
+	function addMenuOption( id : String, ?onSelect : Void->Void ) : AnchorElement {
 
-        #if web
-        linkDownload.href = linkDownload.download = null;
-        #end
+		var a = document.createAnchorElement();
+		a.classList.add( 'option' );
 
-        element.classList.remove( 'visible' );
-    }
+		var icon = document.createImageElement();
+		icon.src = 'image/ic_$id.png';
+		icon.classList.add( 'button' );
+		a.appendChild( icon );
+
+		menu.appendChild( a );
+
+		if( onSelect != null ) {
+			a.onclick = onSelect;
+			a.ontouchstart = onSelect;
+		}
+
+		return a;
+	}
+
+	function handleClickBody(e) {
+		if( isMenuOpen && e.target != more ) {
+			closeMenu();
+		}
+	}
 }

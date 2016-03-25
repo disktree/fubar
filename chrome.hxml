@@ -1,4 +1,5 @@
-core.hxml
+-D platform=chrome
 -lib chrome-app
 -D desktop
 -debug
+core.hxml

@@ -1,5 +1,5 @@
 {
-    "name": "::FUbar",
+    "name": "FUbar",
     "version": "::version::",
     "description": "Animated GIF Television",
     "manifest_version": 2,
@@ -21,3 +21,6 @@
         "128": "icon/fubar-128.png"
     }
 }
+::if chrome::
+CHROM
+::end::

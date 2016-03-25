@@ -3,6 +3,7 @@ package fubar.app;
 import js.Browser.document;
 import js.Browser.window;
 import js.html.DivElement;
+import js.html.DeviceOrientationEvent ;
 import om.input.Keycode;
 import om.Time.now;
 import om.api.Giphy;
@@ -27,6 +28,7 @@ class PlayActivity extends om.app.Activity {
 	var timeImageShown : Float;
 	var timePauseStart : Float;
 	var timeInvisibleStart : Float;
+	//var trendingIndex = 0;
 
     public function new( mode : PlayMode ) {
         super();
@@ -55,10 +57,11 @@ class PlayActivity extends om.app.Activity {
 		timeLastImageChange = 0;
 		timeLastUpdate = now();
 		timeImageShown = 0;
-		timePauseStart = 0;
+		timePauseStart = now();
 
 		player.onView = function(item){
 			timeLastImageChange = now();
+			controls.share.item = item;
 		}
 
 		controls.mode.onChange = function(change:PlaySettingsChange){
@@ -69,25 +72,32 @@ class PlayActivity extends om.app.Activity {
 					loadTrendingItems();
 				case search:
 					var term = controls.mode.searchTerm;
+					trace(term);
 					if( term.length == 0 ) {
 						trace( "no search input", 'debug' );
 					} else {
 						var terms = ~/(\\s+)/.split( term );
-						loadItems( term.split('') );
+						loadItems( terms );
 					}
 				}
 			case PlaySettingsChange.search(term):
-				var terms = ~/(\s+)/.split( term );
+			trace(term);
+				var terms = ~/(\\s+)/.split( term );
 				loadItems( terms );
 			}
 		}
 		controls.play.onChange = function(play){
 			if( play ) {
+
 				if( timePauseStart > 0 ) {
 					//timeOffset += now() - timePauseStart;
 					timeImageShown -= now() - timePauseStart;
+					//timeLastUpdate += now() - timePauseStart;
 					timePauseStart = 0;
 				}
+
+				//timeLastUpdate
+
 			} else {
 				timePauseStart = now();
 			}
@@ -134,8 +144,9 @@ class PlayActivity extends om.app.Activity {
 
 		//container.addEventListener( 'click', handleClickContainer, false );
 		player.element.addEventListener( 'dblclick', handleDoubleClickPlayer, false );
-		window.addEventListener( 'keydown', handleKeyDown, false );
 		document.addEventListener( 'visibilitychange', handleVisibilityChange, false );
+		window.addEventListener( 'orientationchange', handleDeviceOrientationChange, true );
+		window.addEventListener( 'keydown', handleKeyDown, false );
     }
 
     override function onStop() {
@@ -174,14 +185,17 @@ class PlayActivity extends om.app.Activity {
     }
 
 	function loadItem( id : String ) {
+		trace( 'Giphy.item: '+id+' ...' );
 		service.get( id, function(e,i) handleItemsLoad( e, [i] ) );
 	}
 
-	function loadItems( q : Array<String> ) {
-		service.trending( config.limit, config.rating, handleItemsLoad );
+	function loadItems( q : Array<String>, offset = 0 ) {
+		trace( 'Giphy.search: '+q+' ...' );
+		service.search( q, config.limit, offset, config.rating, handleItemsLoad );
 	}
 
 	function loadTrendingItems() {
+		trace( 'Giphy.trending ...' );
 		service.trending( config.limit, config.rating, handleItemsLoad );
 	}
 
@@ -246,6 +260,11 @@ class PlayActivity extends om.app.Activity {
         case arrow_left:
             player.prev();
         }
+    }
+
+	function handleDeviceOrientationChange( e : DeviceOrientationEvent ) {
+        //TODO
+		trace(e);
     }
 
 	function handleVisibilityChange(e) {

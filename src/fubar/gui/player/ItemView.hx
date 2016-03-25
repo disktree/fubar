@@ -42,9 +42,10 @@ class ItemView {
 			still.style.display = 'none';
 			gif.style.display = 'inline-block';
             gif.classList.add( 'playing' );
+			element.appendChild( gif );
             onLoad();
         }
-        element.appendChild( gif );
+        //element.appendChild( gif );
 
         still = document.createImageElement();
 		still.onload = function(){
@@ -52,6 +53,7 @@ class ItemView {
 		};
 		still.src = item.images.original_still.url;
         element.appendChild( still );
+
 
 		/*
 		if( item.caption != null ) {
@@ -79,7 +81,7 @@ class ItemView {
         }
         loader.onComplete = function(src) {
             //loadbar.remove();
-			still.remove();
+			//still.remove();
             gif.src = src;
         }
         loader.load( item.images.original.url );
@@ -87,6 +89,7 @@ class ItemView {
 
     public function remove( immediately = false ) {
 		loader.abort();
+		element.classList.remove( 'playing' );
 		if( immediately ) {
 			element.remove();
 		} else {

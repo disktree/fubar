@@ -11,5 +11,4 @@
 -dce full
 -D name=fubar
 -D version=3.0.0-alpha.4
-#-D activity_debug
 --macro fubar.macro.Build.app()

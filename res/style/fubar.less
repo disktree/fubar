@@ -1,8 +1,9 @@
 
 //@import "/home/tong/dev/lib/om.style/res/style/vignette";
+@import "../../../../lib/om.widget/res/style/widgets";
 
 @c-0: #000;
-@c-1: #fff;
+@c-1: #f0f0f0;
 
 @font-size: 20px;
 @controls-size-inner: 32px;
@@ -53,20 +54,20 @@ body {
 
     font-family: Roboto;
     font-size: 14px;
+	-webkit-font-smoothing: antialiased;
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
+	-webkit-tap-highlight-color: transparent;
 
     background: @c-0;
     color: @c-1;
-
-    -webkit-font-smoothing: antialiased;
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
-    -webkit-tap-highlight-color: transparent;
 }
 
 img {
 	-webkit-touch-callout: none;
 	-webkit-user-drag: none;
 	user-drag: none;
-	//-webkit-user-select: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
 }
 
 input, select, option {
@@ -95,13 +96,27 @@ input[type="search"]::-webkit-search-results-decoration {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+/*
+.action-menu {
+
+	.button {
+	}
+
+	.menu {
+	}
+}
+*/
+
+////////////////////////////////////////////////////////////////////////////////
+
 #splash {
 	display: none;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#fubar {}
+#fubar {
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -122,7 +137,7 @@ input[type="search"]::-webkit-search-results-decoration {
         transform: translate(-50%,-50%);
         max-width: 640px;
         max-height: 60%;
-        animation: fadeOut 0.2s ease-out 2.2s 1 both;
+		animation: fadeOut 0.2s ease-out 2.2s 1 both;
     }
 }
 
@@ -216,10 +231,10 @@ input[type="search"]::-webkit-search-results-decoration {
         }
         .item.inc {
 			opacity: 0;
-            animation: item_inc 0.2s ease-out 0.05s 1 forwards;
+            animation: item_inc 0.3s ease-out 0.1s 1 both;
         }
         .item.out {
-            animation: item_out 0.1s ease-out 0s 1 forwards;
+            animation: item_out 0.5s ease-out 0s 1 both;
         }
 		.item.back_to_init {
 			//animation: item_back_to_init 1s ease-in-out 0s 1 none;
@@ -266,10 +281,15 @@ input[type="search"]::-webkit-search-results-decoration {
 			height: @controls-size-inner;
 			padding: 6px 10px 6px 10px;
 			cursor: pointer;
-			//background: #ff0000;
+			opacity: 0.7;
+			transition: opacity 0.2s;
 		}
 
-		transition: transform 0.2s;
+		img.button:hover {
+			opacity: 1.0;
+		}
+
+		transition: transform 0.12s;
 	}
 
 	.menu.shown {
@@ -288,7 +308,6 @@ input[type="search"]::-webkit-search-results-decoration {
 	.menu.mode {
 
 		top: 2px;
-		//left: @controls-size-outter;
 
 		input[type="search"] {
 
@@ -307,7 +326,6 @@ input[type="search"]::-webkit-search-results-decoration {
 		}
 
 		.clear {
-			//opacity: 0;
 			display: none;
 			position: relative;
 			left: -14px;
@@ -316,8 +334,28 @@ input[type="search"]::-webkit-search-results-decoration {
 	}
 
 	.menu.share {
+
 		top: 2px;
 		right: 2px;
+
+		//.button {}
+
+		.menu {
+
+			position: absolute;
+			top: 50px;
+			-webkit-user-select: none;
+			display: none;
+
+			.option {
+				cursor: pointer;
+				.icon {}
+				.textlabel {}
+			}
+			.option:hover {
+				//color: #000;
+			}
+		}
 	}
 }
 
@@ -340,7 +378,7 @@ input[type="search"]::-webkit-search-results-decoration {
 	max-height: 1px;
 
 	background: #fff;
-	opacity: 0.5;
+	opacity: 0.2;
 	//mix-blend-mode: difference;
 
 	z-index: 103;
