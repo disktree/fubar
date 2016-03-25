@@ -1,6 +1,0 @@
-core.hxml
--D android
--D mobile
--D touch_device
--D out=../fubar-android/assets
--debug
