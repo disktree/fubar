@@ -12,6 +12,11 @@ import om.api.Giphy;
 import fubar.net.ImagePreloader;
 import fubar.gui.player.*;
 
+enum ScaleMode {
+	fit;
+	letterbox;
+}
+
 class Player {
 
     public dynamic function onView( item : om.api.Giphy.Item ) {}
@@ -23,20 +28,33 @@ class Player {
     public var items(default,null) : Array<om.api.Giphy.Item>;
 	public var pagination(default,null)  : Pagination;
 
+	public var scaleMode(default,set)  : ScaleMode;
+	inline function set_scaleMode( m : ScaleMode ) {
+		switch m {
+		case fit:
+		case letterbox:
+		}
+		return scaleMode = m;
+	}
+
 	public var backgroundColor(default,set) : String;
 	inline function set_backgroundColor( v : String ) return backgroundColor = element.style.backgroundColor = v;
 
 	var background : DivElement;
-	//var statusbar : DivElement;
     var currentView : ItemView;
 	var nextView : ItemView;
 	var preloader : ImagePreloader;
 
-    public function new( backgroundColor = '#000' ) {
+    public function new( ?scaleMode : ScaleMode, backgroundColor = '#000' ) {
+
+		if( scaleMode == null ) {
+			scaleMode = fit;
+		}
 
         element = document.createDivElement();
         element.classList.add( 'player' );
 
+		this.scaleMode = scaleMode;
         this.backgroundColor = backgroundColor;
 
         index = 0;
@@ -48,10 +66,6 @@ class Player {
         container = document.createDivElement();
         container.classList.add( 'media' );
         element.appendChild( container );
-
-		//statusbar = document.createDivElement();
-        //statusbar.classList.add( 'statusbar' );
-        //element.appendChild( statusbar );
 
 		preloader = new ImagePreloader();
     }
@@ -90,6 +104,9 @@ class Player {
 		}
 
         nextView = new ItemView( item );
+		nextView.onLoadProgress = function(bytes,total){
+
+		}
         nextView.onLoad = function(){
 
 			nextView = null;

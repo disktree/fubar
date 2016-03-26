@@ -49,10 +49,7 @@ class ControlMenuMode extends ControlMenu {
         searchClear = addIconButton( 'clear' );
 		searchClear.addEventListener( 'click', handleClearClick, false );
 
-    //    if( App.settings.search != null )
-    //        setSearchText( App.settings.search );
-
-        //setMode( App.settings.mode );
+		setMode( trending );
     }
 
 	public override function dispose() {
@@ -68,16 +65,16 @@ class ControlMenuMode extends ControlMenu {
             trendingButton.style.display = 'inline-block';
             searchButton.style.display = 'none';
             searchInput.style.display = 'none';
-            searchClear.style.display = 'none';
+            searchClear.style.opacity = '0';
         case search:
             trendingButton.style.display = 'none';
             searchButton.style.display = 'inline-block';
             searchInput.style.display = 'inline-block';
             if( searchInput.value.length == 0 ) {
-                searchClear.style.display = 'none';
+                searchClear.style.opacity = '0';
                 searchInput.focus();
             } else {
-                searchClear.style.display = 'inline-block';
+				searchClear.style.opacity = '1';
             }
         }
     }

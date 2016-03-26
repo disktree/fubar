@@ -23,16 +23,15 @@ class ImagePreloader {
 
 		worker = new Worker( 'worker/image-preloader.js' );
 		worker.onmessage = function(e) {
-			trace(e.data);
 			switch e.data.status {
 			case 0:
-				trace(e.data.url);
+				//trace(e.data.url);
 			case 1:
-				trace(e.info);
+				trace( e.info, 'error' );
 			}
 		}
 		worker.onerror = function(e) {
-			trace(e);
+			trace( e, 'error' );
 		}
 	}
 

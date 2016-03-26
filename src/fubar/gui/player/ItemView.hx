@@ -12,6 +12,7 @@ class ItemView {
 	static inline var ITEM_ANIMATION_PREFIX = 'item_';
 
     public dynamic function onLoad() {}
+    public dynamic function onLoadProgress( bytes : Int, total : Int ) {}
 
     public var element(default,null) : DivElement;
     public var gif(default,null) : ImageElement;
@@ -42,18 +43,17 @@ class ItemView {
 			still.style.display = 'none';
 			gif.style.display = 'inline-block';
             gif.classList.add( 'playing' );
-			element.appendChild( gif );
             onLoad();
         }
-        //element.appendChild( gif );
+        element.appendChild( gif );
 
         still = document.createImageElement();
 		still.onload = function(){
 			still.style.display = 'inline-block';
 		};
-		still.src = item.images.original_still.url;
+	//	still.src = item.images.original_still.url;
+		//var stillLoader = new fubar.net.ImageLoader();
         element.appendChild( still );
-
 
 		/*
 		if( item.caption != null ) {
@@ -77,11 +77,11 @@ class ItemView {
         loader.onProgress = function(t,l) {
             //var percent = l/t*100;
             //loadbar.style.width = percent+'px';
-            //onLoadProgress( l, t );
+            onLoadProgress( l, t );
         }
         loader.onComplete = function(src) {
             //loadbar.remove();
-			//still.remove();
+			still.remove();
             gif.src = src;
         }
         loader.load( item.images.original.url );
@@ -89,7 +89,6 @@ class ItemView {
 
     public function remove( immediately = false ) {
 		loader.abort();
-		element.classList.remove( 'playing' );
 		if( immediately ) {
 			element.remove();
 		} else {

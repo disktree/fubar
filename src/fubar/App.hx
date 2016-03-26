@@ -43,8 +43,6 @@ class App {
 		App.element = element;
 		App.config = config;
 
-		trace( App.NAME+'-'+App.PLAFORM+'-'+App.VERSION, 'info' );
-
 		service = new Service( fubar.macro.Build.getGiphyAPIKey() );
 
 		//new fubar.app.PlayActivity( trending ).boot( container );
@@ -89,6 +87,8 @@ class App {
 		#if debug
 		haxe.Log.trace = _trace;
 		#end
+
+		trace( App.NAME+'-'+App.PLAFORM+'-'+App.VERSION, 'info' );
 
 		isMobile =
 			#if android

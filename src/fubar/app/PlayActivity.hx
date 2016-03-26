@@ -3,7 +3,6 @@ package fubar.app;
 import js.Browser.document;
 import js.Browser.window;
 import js.html.DivElement;
-import js.html.DeviceOrientationEvent ;
 import om.input.Keycode;
 import om.Time.now;
 import om.api.Giphy;
@@ -19,6 +18,7 @@ class PlayActivity extends om.app.Activity {
 
     var mode : PlayMode;
     var player : Player;
+	//var preloader : DivElement;
 	var statusbar : DivElement;
     var controls : Controls;
     var touchInput : TouchInput;
@@ -28,7 +28,6 @@ class PlayActivity extends om.app.Activity {
 	var timeImageShown : Float;
 	var timePauseStart : Float;
 	var timeInvisibleStart : Float;
-	//var trendingIndex = 0;
 
     public function new( mode : PlayMode ) {
         super();
@@ -41,6 +40,11 @@ class PlayActivity extends om.app.Activity {
 
         player = new Player();
         element.append( player.element );
+
+		//preloader = document.createDivElement();
+		//preloader.classList.add( 'loader' );
+		//preloader.innerHTML = '<div class="ani"><div></div></div>';
+		//element.append( preloader );
 
 		controls = new Controls( false);
         element.append( controls.element );
@@ -57,11 +61,10 @@ class PlayActivity extends om.app.Activity {
 		timeLastImageChange = 0;
 		timeLastUpdate = now();
 		timeImageShown = 0;
-		timePauseStart = now();
+		timePauseStart = 0;
 
 		player.onView = function(item){
 			timeLastImageChange = now();
-			controls.share.item = item;
 		}
 
 		controls.mode.onChange = function(change:PlaySettingsChange){
@@ -72,32 +75,26 @@ class PlayActivity extends om.app.Activity {
 					loadTrendingItems();
 				case search:
 					var term = controls.mode.searchTerm;
-					trace(term);
 					if( term.length == 0 ) {
 						trace( "no search input", 'debug' );
 					} else {
 						var terms = ~/(\\s+)/.split( term );
-						loadItems( terms );
+						loadItems( term.split('') );
 					}
 				}
 			case PlaySettingsChange.search(term):
-			trace(term);
-				var terms = ~/(\\s+)/.split( term );
+				var terms = ~/(\s+)/.split( term );
+				trace(terms);
 				loadItems( terms );
 			}
 		}
 		controls.play.onChange = function(play){
 			if( play ) {
-
 				if( timePauseStart > 0 ) {
 					//timeOffset += now() - timePauseStart;
 					timeImageShown -= now() - timePauseStart;
-					//timeLastUpdate += now() - timePauseStart;
 					timePauseStart = 0;
 				}
-
-				//timeLastUpdate
-
 			} else {
 				timePauseStart = now();
 			}
@@ -144,9 +141,8 @@ class PlayActivity extends om.app.Activity {
 
 		//container.addEventListener( 'click', handleClickContainer, false );
 		player.element.addEventListener( 'dblclick', handleDoubleClickPlayer, false );
-		document.addEventListener( 'visibilitychange', handleVisibilityChange, false );
-		window.addEventListener( 'orientationchange', handleDeviceOrientationChange, true );
 		window.addEventListener( 'keydown', handleKeyDown, false );
+		document.addEventListener( 'visibilitychange', handleVisibilityChange, false );
     }
 
     override function onStop() {
@@ -185,23 +181,22 @@ class PlayActivity extends om.app.Activity {
     }
 
 	function loadItem( id : String ) {
-		trace( 'Giphy.item: '+id+' ...' );
 		service.get( id, function(e,i) handleItemsLoad( e, [i] ) );
 	}
 
-	function loadItems( q : Array<String>, offset = 0 ) {
-		trace( 'Giphy.search: '+q+' ...' );
-		service.search( q, config.limit, offset, config.rating, handleItemsLoad );
+	function loadItems( q : Array<String> ) {
+		service.search( q, config.limit, 0, config.rating, handleItemsLoad );
 	}
 
 	function loadTrendingItems() {
-		trace( 'Giphy.trending ...' );
 		service.trending( config.limit, config.rating, handleItemsLoad );
 	}
 
 	function handleItemsLoad( e : om.Error, items : Array<Item> ) {
 		if( e != null ) {
 			//TODO
+			//replace( new ErrorActivity(e) );
+
 		} else {
 			var itemsReceived = items.length;
 			var i = 0;
@@ -226,11 +221,9 @@ class PlayActivity extends om.app.Activity {
         case up(v):
 			controls.show();
             //TODO show image info
-            //player.showImageInfo();
         case down(v):
 			controls.hide();
             //TODO hide image info
-            //player.showImageInfo();
         case left(v):
             player.next();
         case right(v):
@@ -259,12 +252,9 @@ class PlayActivity extends om.app.Activity {
         case arrow_down:
         case arrow_left:
             player.prev();
+		default:
+			player.next();
         }
-    }
-
-	function handleDeviceOrientationChange( e : DeviceOrientationEvent ) {
-        //TODO
-		trace(e);
     }
 
 	function handleVisibilityChange(e) {

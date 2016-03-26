@@ -78,8 +78,15 @@ class Build<T:Config> {
 
 			syncDirectory( 'res/font', '$out/font' );
 			syncDirectory( 'res/image', '$out/image' );
+			syncDirectory( 'res/worker', '$out/worker' );
 
-			lessc( config.name+'-'+platform, config.name );
+			var lessSrc = config.name+'-'+platform+'.less';
+			if( !exists( 'res/style/'+lessSrc ) ) lessSrc = config.name+'.less';
+			if( !exists( 'res/style/'+lessSrc ) )
+				Context.warning( 'no stylesheet found', Context.currentPos() );
+			else {
+				lessc( lessSrc, config.name + '.css' );
+			}
 
 			syncTemplate( 'res/html/index.html', '$out/index.html' );
 
@@ -107,20 +114,22 @@ class Build<T:Config> {
 
 		var dir = dst.directory();
 		if( !exists( dir ) ) createDirectory( dir );
+
 		var html = new haxe.Template( getContent( src ) ).execute( config );
 		saveContent( dst, html );
 
 		return true;
 	}
 
-	function lessc( srcName : String, ?dstName : String, debug = false ) {
+	function lessc( srcName : String, ?dstName : String ) {
 
 		if( dstName == null ) dstName = srcName;
-		var srcPath = 'res/style/$srcName.less';
-		var dstPath = '$out/$dstName.css';
+		var srcPath = 'res/style/$srcName';
+		var dstPath = '$out/$dstName';
+
 
 		var args = [ srcPath, dstPath, '--no-color' ];
-		if( !debug ) {
+		if( config.release ) {
 			args.push( '-x' );
 			args.push( '--clean-css' );
 		}

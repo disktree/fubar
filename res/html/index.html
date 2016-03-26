@@ -12,20 +12,51 @@
         <meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		::if description::<meta name="description" content="::description::">::end::
+		<link rel="manifest" href="manifest.json">
+		<link rel="icon" type="image/png" href="icon/fubar-48.png" />
 		::end::
 
-		<link rel="icon" type="image/png" href="icon/fubar-48.png" />
-        <link rel="manifest" href="manifest.json">
         <link rel="stylesheet" href="fubar.css" charset="utf-8">
-
         <script src="fubar.js" defer></script>
 
     </head>
+
     <body>
+
+		::if web::
 		<div id="splash">
 			<h1>FUbar</h1>
-			<h2>Animated GIF Television Player</h2>
+			::if description::<h2>Animated GIF Television Channel</h2>::end::
 			<h3>Powered By Giphy</h3>
 		</div>
+		::end::
+
+		<!--
+		<div id="__preloaded_images__" style="display:none;">
+			<img src="image/ic_add.png"/>
+			<img src="image/ic_android.png"/>
+			<img src="image/ic_chrome.png"/>
+			<img src="image/ic_download.png"/>
+			<img src="image/ic_favourite.png"/>
+			<img src="image/ic_github.png"/>
+			<img src="image/ic_help.png"/>
+			<img src="image/ic_link.png"/>
+			<img src="image/ic_menu.png"/>
+			<img src="image/ic_more_vert.png"/>
+			<img src="image/ic_pause.png"/>
+			<img src="image/ic_play.png"/>
+			<img src="image/ic_reddit.png"/>
+			<img src="image/ic_search.png"/>
+			<img src="image/ic_settings.png"/>
+			<img src="image/ic_share.png"/>
+			<img src="image/ic_trending.png"/>
+			<img src="image/ic_tumblr.png"/>
+			<img src="image/ic_twitter.png"/>
+			<img src="image/ic_wallpaper.png"/>
+			<img src="image/ic_youtube.png"/>
+		</div>
+		-->
+
 	</body>
+
 </html>
