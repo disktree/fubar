@@ -6,6 +6,8 @@ import haxe.macro.Context;
 import haxe.macro.Expr;
 import sys.io.File.*;
 import sys.FileSystem.*;
+import om.macro.DefineUtil.*;
+import om.io.FileUtil;
 import om.io.FileSync.*;
 import Sys.println;
 using haxe.io.Path;
@@ -55,8 +57,13 @@ class Build<T:Config> {
 			#else throw 'no platform specified'
 			#end;
 
-		out = Context.definedValue( 'out' );
+		out = definedValue( 'out' );
 		if( out == null ) out = '$OUT/'+platform;
+
+		var clean = defined( 'clean' );
+		if( clean ) {
+			if( exists( out ) ) FileUtil.deleteDirectory( out );
+		}
 
 		var config = om.Hxon.read( 'project.hxon' );
 		config.platform = ''+platform;
