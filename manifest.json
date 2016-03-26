@@ -1,0 +1,20 @@
+{
+    "short_name":"FUbar",
+    "name":"Fubar",
+    "launch_path":"index.html",
+    "description":"Animated GIF Television",
+    "language":"en",
+    "default_locale": "en",
+    "developer":{"name":"disktree","url":"http://disktree.net"},
+    "display": "fullscreen",
+    "orientation": "landscape",
+    "fullscreen": "true",
+    "icons":[
+        {"type":"image/png","sizes":"48x48","src":"icon/fubar-48.png"},
+        {"type":"image/png","sizes":"72x72","src":"icon/fubar-72.png"},
+        {"type":"image/png","sizes":"96x96","src":"icon/fubar-96.png"},
+        {"type":"image/png","sizes":"144x144","src":"icon/fubar-144.png"},
+        {"type":"image/png","sizes":"192x192","src":"icon/fubar-192.png"},
+        {"type":"image/png","sizes":"512x512","src":"icon/fubar-512.png"}
+    ]
+}
