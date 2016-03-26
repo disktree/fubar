@@ -6,10 +6,13 @@ import js.html.AnchorElement;
 import js.html.DivElement;
 import js.html.ImageElement;
 import js.html.SpanElement;
+import haxe.Timer;
 
 using StringTools;
 
 class ControlMenuShare extends ControlMenu {
+
+	static inline var MENU_TIMEOUT = 3000;
 
     public var item(default,set) : om.api.Giphy.Item;
 	function set_item(n:om.api.Giphy.Item) {
@@ -53,6 +56,7 @@ class ControlMenuShare extends ControlMenu {
 	}
 
 	var isMenuOpen : Bool;
+	var isMouseOver : Bool;
 
 	var more : ImageElement;
 	var menu : DivElement;
@@ -64,17 +68,30 @@ class ControlMenuShare extends ControlMenu {
 	//var buttonWallpaper : ImageElement;
 	#end
 
+	var timer : Timer;
+
     public function new() {
 
         super( 'share' );
 
 		isMenuOpen = false;
+		isMouseOver = false;
+		timer = new Timer( MENU_TIMEOUT );
 
 		menu = document.createDivElement();
-		menu.classList.add( 'menu' );
+		menu.classList.add( 'menu', 'closed' );
+		element.onmouseenter = function() {
+			isMouseOver = true;
+		}
+		element.onmouseleave = function() {
+			isMouseOver = false;
+			if( timer == null ) closeMenu();
+		}
 		element.appendChild( menu );
 
 		optShare = addMenuOption( 'share', function(){
+
+			closeMenu();
 
 			if( item != null ) {
 
@@ -95,21 +112,27 @@ class ControlMenuShare extends ControlMenu {
 		optDownload =
 			#if android
 			addMenuOption( 'download', function(){
-				#if android
+				closeMenu();
 				var file = 'giphy-'+item.id+'.gif';
 				untyped AndroidApp.downloadImage( item.images.original.url, file, item.images.original.url, file );
-				#end
 			});
 			#else
-			addMenuOption( 'download' );
+			addMenuOption( 'download', function(){
+				closeMenu();
+			});
 			#end
 
 		more = createIconButton( 'more_vert' );
 		more.onclick = toggleMenu;
 		element.appendChild( more );
 
-		//document.body.addEventListener( 'click', handleClickBody, false );
-		//document.body.addEventListener( 'touchstart', handleClickBody, false );
+		/*
+		if( om.System.supportsTouchInput() ) {
+			App.element.addEventListener( 'touchstart', handleClickBody, false );
+		} else {
+			App.element.addEventListener( 'click', handleClickBody, false );
+		}
+		*/
 
         /*
         #if chrome
@@ -131,14 +154,24 @@ class ControlMenuShare extends ControlMenu {
     }
 
 	public function openMenu() : Bool {
+		destroyTimer();
 		isMenuOpen = true;
-		menu.style.display = 'inline-block';
+		menu.classList.remove( 'closed' );
+		menu.classList.add( 'opened' );
+		timer = new Timer( MENU_TIMEOUT );
+		timer.run = function(){
+			timer.stop();
+			timer = null;
+			if( !isMouseOver ) closeMenu();
+		}
 		return true;
 	}
 
 	public function closeMenu() : Bool {
+		destroyTimer();
 		isMenuOpen = false;
-		menu.style.display = 'none';
+		menu.classList.remove( 'opened' );
+		menu.classList.add( 'closed' );
 		return false;
 	}
 
@@ -150,8 +183,14 @@ class ControlMenuShare extends ControlMenu {
 
 		super.dispose();
 
-		document.body.removeEventListener( 'click', handleClickBody );
-		document.body.removeEventListener( 'touchstart', handleClickBody );
+		destroyTimer();
+		/*
+		if( om.System.supportsTouchInput() ) {
+			App.element.removeEventListener( 'touchstart', handleClickBody );
+		} else {
+			App.element.removeEventListener( 'click', handleClickBody );
+		}
+		*/
 
 		menu.remove();
 		more.remove();
@@ -177,9 +216,19 @@ class ControlMenuShare extends ControlMenu {
 		return a;
 	}
 
+	function destroyTimer() {
+		if( timer != null ) {
+			timer.stop();
+			timer = null;
+		}
+	}
+
+	/*
 	function handleClickBody(e) {
+		trace(e);
 		if( isMenuOpen && e.target != more ) {
 			closeMenu();
 		}
 	}
+	*/
 }

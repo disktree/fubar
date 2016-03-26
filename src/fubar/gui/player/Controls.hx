@@ -34,8 +34,8 @@ class Controls {
         }, false );
         */
 
-		this.play = addControlMenu( new ControlMenuAutoplay( autoplay ) );
 		this.mode = addControlMenu( new ControlMenuMode() );
+		this.play = addControlMenu( new ControlMenuAutoplay( autoplay ) );
 		this.share = addControlMenu( new ControlMenuShare() );
     }
 

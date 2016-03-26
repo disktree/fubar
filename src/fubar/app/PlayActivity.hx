@@ -65,9 +65,11 @@ class PlayActivity extends om.app.Activity {
 
 		player.onView = function(item){
 			timeLastImageChange = now();
+			controls.share.item = item;
 		}
 
 		controls.mode.onChange = function(change:PlaySettingsChange){
+
 			switch change {
 			case PlaySettingsChange.mode(m):
 				switch m {
@@ -78,25 +80,25 @@ class PlayActivity extends om.app.Activity {
 					if( term.length == 0 ) {
 						trace( "no search input", 'debug' );
 					} else {
-						var terms = ~/(\\s+)/.split( term );
+						//var terms = ~/(\\s+)/.split( term ); //TODO
 						loadItems( term.split('') );
 					}
 				}
 			case PlaySettingsChange.search(term):
-				var terms = ~/(\s+)/.split( term );
-				trace(terms);
+				var terms = ~/(\s+)/.split( term ); //TODO
 				loadItems( terms );
 			}
 		}
 		controls.play.onChange = function(play){
 			if( play ) {
 				if( timePauseStart > 0 ) {
-					//timeOffset += now() - timePauseStart;
 					timeImageShown -= now() - timePauseStart;
 					timePauseStart = 0;
 				}
+				statusbar.style.display = 'block';
 			} else {
 				timePauseStart = now();
+				statusbar.style.display = 'none';
 			}
 		}
 
@@ -169,6 +171,7 @@ class PlayActivity extends om.app.Activity {
 				} else {
 					var percent = timeImageShown / config.autoplay / 10;
 					statusbar.style.width =  Std.int( window.innerWidth * percent / 100 ) + 'px';
+					//statusbar.style.left =  Std.int( window.innerWidth * percent / 100 ) + 'px';
 				}
 			}
 		}
@@ -192,18 +195,13 @@ class PlayActivity extends om.app.Activity {
 		if( e != null ) {
 			//TODO
 			//replace( new ErrorActivity(e) );
-
 		} else {
-
-
 			var filteredItems = new Array<Item>();
 			for( item in items ) {
 				if( Std.parseInt( item.images.original.size ) < App.config.maxGifSize ) {
 					filteredItems.push( item );
 				}
 			}
-			trace( (items.length-filteredItems.length)+' items filtered' );
-
 			/*
 			var itemsReceived = items.length;
 			var i = 0;
@@ -221,6 +219,7 @@ class PlayActivity extends om.app.Activity {
 			if( n > 0 ) trace( n+' items filtered' );
 			player.load( items );
 			*/
+			trace( (items.length-filteredItems.length)+' items filtered' );
 			trace(filteredItems.length);
 			player.load( filteredItems );
 		}
@@ -266,7 +265,7 @@ class PlayActivity extends om.app.Activity {
         case arrow_left:
             player.prev();
 		default:
-			player.next();
+			//player.next();
         }
     }
 

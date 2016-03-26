@@ -15,8 +15,12 @@ class ControlMenuMode extends ControlMenu {
 
     public dynamic function onChange( change : PlaySettingsChange ) {}
 
+	public var mode(default,null) : PlayMode;
+
 	public var searchTerm(get,null) : String;
 	inline function get_searchTerm() return searchInput.value;
+
+	//var lastSubmittedSearch : String;
 
     var trendingButton : ImageElement;
     var searchButton : ImageElement;
@@ -29,15 +33,20 @@ class ControlMenuMode extends ControlMenu {
 
         trendingButton = addIconButton( 'trending' );
         trendingButton.onclick = function(_) {
+			/*
+			if( lastSubmittedSearch != null ) {
+				//searchInput.value = lastSubmittedSearch;
+			}
+			*/
             setMode( search );
-            onChange( mode( search ) );
+            onChange( PlaySettingsChange.mode( search ) );
         }
 
         searchButton = addIconButton( 'search' );
         searchButton.style.display = 'none';
         searchButton.onclick = function(_) {
             setMode( trending );
-            onChange( mode( trending ) );
+            onChange( PlaySettingsChange.mode( trending ) );
         }
 
         searchInput = document.createInputElement();
@@ -60,7 +69,8 @@ class ControlMenuMode extends ControlMenu {
 	}
 
     function setMode( mode : PlayMode ) {
-        switch mode {
+		this.mode = mode;
+        switch this.mode {
         case trending:
             trendingButton.style.display = 'inline-block';
             searchButton.style.display = 'none';
@@ -87,10 +97,12 @@ class ControlMenuMode extends ControlMenu {
     function updateSearchInput() {
         searchInput.style.width = Std.int( LETTER_WIDTH*1.2 + (LETTER_WIDTH * (searchInput.value.length)) ) +'px';
         if( searchInput.value.length == 0 ) {
-            searchClear.style.display = 'none';
+            //searchClear.style.display = 'none';
+            searchClear.style.opacity = '0';
             searchInput.focus();
         } else {
-            searchClear.style.display = 'inline-block';
+			//searchClear.style.display = 'inline-block';
+			searchClear.style.opacity = '1';
         }
     }
 
@@ -99,10 +111,15 @@ class ControlMenuMode extends ControlMenu {
     }
 
     function handleSearchEnter(e) {
+
         e.preventDefault();
         e.stopPropagation();
+
         searchInput.blur();
-        onChange( search( searchInput.value ) );
+
+		//lastSubmittedSearch = searchInput.value;
+
+        onChange( PlaySettingsChange.search( searchInput.value ) );
     }
 
 	function handleClearClick(e) {

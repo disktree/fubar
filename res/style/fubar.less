@@ -7,12 +7,13 @@
 @c-0: #000;
 @c-1: #fff;
 
-@font-size: 20px;
-@controls-size-inner: 32px;
-@controls-size-outter: 42px;
-
 @font: 'Roboto';
 @font-size: 14px;
+
+@controls-opacity: 0.8;
+
+@controls-size-inner: 32px;
+@controls-size-outter: 42px;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -156,6 +157,7 @@ input[type="search"]::-webkit-search-results-decoration {
     bottom: 0;
     left: 0;
 
+
 	.background {
 
 		z-index: 101;
@@ -178,7 +180,6 @@ input[type="search"]::-webkit-search-results-decoration {
         width: 100%;
         height: 100%;
 
-
         .item {
 
 			position: absolute;
@@ -186,8 +187,7 @@ input[type="search"]::-webkit-search-results-decoration {
 			height: 100%;
 
 			//-webkit-filter: grayscale(90%);
-
-			-webkit-user-select: none;
+			//-webkit-user-select: none;
 
 			img {
 				position: absolute;
@@ -275,8 +275,7 @@ input[type="search"]::-webkit-search-results-decoration {
 	right: 0;
 	left: 0;
 
-	pointer-events: none;
-
+	//pointer-events: none;
 	//mix-blend-mode: difference;
 
 	.menu {
@@ -338,7 +337,7 @@ input[type="search"]::-webkit-search-results-decoration {
 		}
 
 		.clear {
-			opacity: 0;
+			opacity: 1;
 			//display: none;
 			position: relative;
 			left: -14px;
@@ -352,41 +351,57 @@ input[type="search"]::-webkit-search-results-decoration {
 		right: 2px;
 
 		.menu {
+
 			position: absolute;
-			top: 50px;
-			-webkit-user-select: none;
-			display: none;
+			top: 44px;
+			//-webkit-user-select: none;
+			//display: none;
+			//opacity: 0;
+			transition: transform 0.3s, opacity 0.3s;
+
 			.option {
 				cursor: pointer;
-				.icon {}
-				.textlabel {}
+				//.icon {}
+				//.textlabel {}
 			}
 			.option:hover {
+
 			}
+		}
+		.menu.opened {
+			transform: translate(0,0);
+			opacity: @controls-opacity;
+		}
+		.menu.closed {
+			transform: translate(200%,0);
+			opacity: 0;
 		}
 	}
 }
 
+/*
 .controls.shown {
 	//transform: translate(0,0);
 }
 .controls.hidden {
 	//transform: translate(0,100%);
 }
+*/
 
 .statusbar {
 
 	position: absolute;
 	bottom: 0;
 	left: 0;
+	right: 0;
 
 	width: 0px;
-	height: 1px;
+	height: 3px;
 	min-height: 1px;
 	max-height: 1px;
 
-	background: #fff;
-	opacity: 0.5;
+	background: @c-1;
+	opacity: 0.6;
 	//mix-blend-mode: difference;
 
 	z-index: 103;
