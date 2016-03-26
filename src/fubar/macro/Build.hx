@@ -18,6 +18,7 @@ typedef Config = {
 	var name : String;
 	var version : String;
 
+	var platform : String;
 	var debug : Bool;
 	var release : Bool;
 
@@ -58,7 +59,7 @@ class Build<T:Config> {
 		if( out == null ) out = '$OUT/'+platform;
 
 		var config = om.Hxon.read( 'project.hxon' );
-		Reflect.setField( config, platform, true );
+		config.platform = '$platform';
 
 		instance = new Build();
 		instance.app( config );
