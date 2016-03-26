@@ -2,60 +2,91 @@ package fubar.net;
 
 import om.Error;
 import js.html.ImageElement;
+import js.html.Worker;
 import js.html.XMLHttpRequest;
 
 class ImagePreloader {
 
-	public var maxPreloads : Int;
+	public var maxConcurrentPreloads : Int;
 
 	var map : Map<String,XMLHttpRequest>;
-	var numPreloads : Int;
+	var numActivePreloads : Int;
 
-	public function new( maxPreloads = 4 ) {
-		this.maxPreloads = maxPreloads;
+	var worker : Worker;
+
+	public function new( maxConcurrentPreloads = 10 ) {
+
+		this.maxConcurrentPreloads = maxConcurrentPreloads;
+
+		numActivePreloads = 0;
 		map = new Map();
-		numPreloads = 0;
+
+		worker = new Worker( 'worker/image-preloader.js' );
+		worker.onmessage = function(e) {
+			trace(e.data);
+			switch e.data.status {
+			case 0:
+				trace(e.data.url);
+			case 1:
+				trace(e.info);
+			}
+		}
+		worker.onerror = function(e) {
+			trace(e);
+		}
 	}
 
-	public function preload( url : String, ?callback : Error->Void ) {
+	public function preload( url : String, ?onResult : Error->Void, useWorker = true ) {
 
 		if( map.exists( url ) ) {
+			trace( 'already preloaded: '+url, 'warn' );
 			return;
 		}
-		if( numPreloads == maxPreloads ) {
-			trace('max preload size reached');
+		if( numActivePreloads == maxConcurrentPreloads ) {
+			trace( 'max concurrent preload size: '+maxConcurrentPreloads, 'warn' );
 			return;
 		}
 
-		var xhr = new XMLHttpRequest();
-		map.set( url, xhr );
-		numPreloads++;
+		if( useWorker ) {
+			worker.postMessage( { type: 0, url: url } );
 
-	    xhr.responseType = BLOB;
-	    xhr.open( 'GET', url, true );
-	    xhr.onload = function(e){
-			map.remove( url );
-			numPreloads--;
-			if( callback != null ) callback( null );
-	        //onComplete( untyped window.URL.createObjectURL( xhr.response ) );
-	    };
-		/*
-	    xhr.onprogress = function(e){
-	        onProgress( e.total, e.loaded );
-	    };
-		*/
-	    xhr.onerror = function(e){
-			map.remove( url );
-			numPreloads--;
-			if( callback != null ) callback( e );
-	    };
+		} else {
 
-	    xhr.send();
+			var xhr = new XMLHttpRequest();
+			map.set( url, xhr );
+			numActivePreloads++;
+
+			xhr.responseType = BLOB;
+			xhr.open( 'GET', url, true );
+			xhr.onload = function(e){
+				map.remove( url );
+				numActivePreloads--;
+				if( onResult != null ) onResult( null );
+				//onComplete( untyped window.URL.createObjectURL( xhr.response ) );
+			};
+			/*
+			xhr.onprogress = function(e){
+			onProgress( e.total, e.loaded );
+			};
+			*/
+			xhr.onerror = function(e){
+				map.remove( url );
+				numActivePreloads--;
+				if( onResult != null ) onResult( e );
+			};
+
+			xhr.send();
+		}
 	}
 
 	public function dispose() {
-		for( xhr in map ) xhr.abort();
+		for( r in map ) r.abort();
 		map = new Map();
+		numActivePreloads = 0;
+		if( worker != null ) {
+			worker.postMessage( { type: 1 } );
+			worker.terminate();
+		}
 	}
 
 }
