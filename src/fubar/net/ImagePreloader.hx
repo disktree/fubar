@@ -35,7 +35,7 @@ class ImagePreloader {
 		}
 	}
 
-	public function preload( url : String, ?onResult : Error->Void, useWorker = true ) {
+	public function preload( url : String, ?onResult : Error->Void, useWorker = false ) {
 
 		if( map.exists( url ) ) {
 			trace( 'already preloaded: '+url, 'warn' );

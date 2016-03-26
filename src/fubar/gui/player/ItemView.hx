@@ -40,12 +40,14 @@ class ItemView {
         gif = document.createImageElement();
         gif.classList.add( 'gif' );
 		gif.onload = function(){
-			still.style.display = 'none';
+			//still.style.display = 'none';
 			gif.style.display = 'inline-block';
             gif.classList.add( 'playing' );
             onLoad();
         }
         element.appendChild( gif );
+
+		gif.src = item.images.original.url;
 
         still = document.createImageElement();
 		still.onload = function(){
@@ -53,7 +55,7 @@ class ItemView {
 		};
 	//	still.src = item.images.original_still.url;
 		//var stillLoader = new fubar.net.ImageLoader();
-        element.appendChild( still );
+        //element.appendChild( still );
 
 		/*
 		if( item.caption != null ) {
@@ -73,6 +75,7 @@ class ItemView {
 		}
 		*/
 
+		/*
 		loader = new fubar.net.ImageLoader();
         loader.onProgress = function(t,l) {
             //var percent = l/t*100;
@@ -85,10 +88,11 @@ class ItemView {
             gif.src = src;
         }
         loader.load( item.images.original.url );
+		*/
     }
 
     public function remove( immediately = false ) {
-		loader.abort();
+		//loader.abort();
 		if( immediately ) {
 			element.remove();
 		} else {

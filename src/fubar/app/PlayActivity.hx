@@ -139,7 +139,6 @@ class PlayActivity extends om.app.Activity {
 		touchInput.onGesture = handleTouchGesture;
 		//touchInput.onStart = handleTouchStart;
 
-		//container.addEventListener( 'click', handleClickContainer, false );
 		player.element.addEventListener( 'dblclick', handleDoubleClickPlayer, false );
 		window.addEventListener( 'keydown', handleKeyDown, false );
 		document.addEventListener( 'visibilitychange', handleVisibilityChange, false );
@@ -149,11 +148,8 @@ class PlayActivity extends om.app.Activity {
 
         super.onStop();
 
-		//timeOffset = 0;
-
 		touchInput.dispose();
 
-		//container.removeEventListener( 'click', handleClickContainer );
 		player.element.removeEventListener( 'dblclick', handleDoubleClickPlayer );
         window.removeEventListener( 'keydown', handleKeyDown );
 		document.removeEventListener( 'visibilitychange', handleVisibilityChange );
@@ -198,18 +194,35 @@ class PlayActivity extends om.app.Activity {
 			//replace( new ErrorActivity(e) );
 
 		} else {
+
+
+			var filteredItems = new Array<Item>();
+			for( item in items ) {
+				if( Std.parseInt( item.images.original.size ) < App.config.maxGifSize ) {
+					filteredItems.push( item );
+				}
+			}
+			trace( (items.length-filteredItems.length)+' items filtered' );
+
+			/*
 			var itemsReceived = items.length;
 			var i = 0;
 			for( item in items ) {
+				//trace(item.images.original.size +' : '+ App.config.maxGifSize  );
 				if( Std.parseInt( item.images.original.size ) > App.config.maxGifSize ) {
+					trace(item.images.original.size);
 					//trace( 'max gif size exceeded '+item.images.original.size+' '+item.images.original.url );
-                	items.splice(i,1);
+                	//items.splice( i, 1 );
+					items.remove( item );
 				}
 				i++;
 			}
-			var filtered = itemsReceived - items.length;
-			if( filtered > 0 ) trace( filtered+' items filtered' );
+			var n = itemsReceived - items.length;
+			if( n > 0 ) trace( n+' items filtered' );
 			player.load( items );
+			*/
+			trace(filteredItems.length);
+			player.load( filteredItems );
 		}
 	}
 

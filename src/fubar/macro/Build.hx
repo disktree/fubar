@@ -59,7 +59,8 @@ class Build<T:Config> {
 		if( out == null ) out = '$OUT/'+platform;
 
 		var config = om.Hxon.read( 'project.hxon' );
-		config.platform = '$platform';
+		config.platform = ''+platform;
+		Reflect.setField( config, platform, true );
 
 		instance = new Build();
 		instance.app( config );
@@ -72,6 +73,8 @@ class Build<T:Config> {
 	function app( config : T ) {
 
 		this.config = config;
+
+		//trace( config );
 
 		Compiler.setOutput( '$out/${config.name}.js' );
 
@@ -127,7 +130,6 @@ class Build<T:Config> {
 		if( dstName == null ) dstName = srcName;
 		var srcPath = 'res/style/$srcName';
 		var dstPath = '$out/$dstName';
-
 
 		var args = [ srcPath, dstPath, '--no-color' ];
 		if( config.release ) {

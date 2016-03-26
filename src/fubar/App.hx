@@ -43,6 +43,8 @@ class App {
 		App.element = element;
 		App.config = config;
 
+		trace( config, 'debug' );
+
 		service = new Service( fubar.macro.Build.getGiphyAPIKey() );
 
 		//new fubar.app.PlayActivity( trending ).boot( container );
@@ -88,13 +90,11 @@ class App {
 		haxe.Log.trace = _trace;
 		#end
 
-		trace( App.NAME+'-'+App.PLAFORM+'-'+App.VERSION, 'info' );
+		trace( '$NAME-$PLAFORM-$VERSION', 'info' );
 
 		isMobile =
-			#if android
-			true;
-			#else
-			om.System.isMobile();
+			#if android true;
+			#else om.System.isMobile();
 			#end
 
 		window.onload = function() {
@@ -106,18 +106,18 @@ class App {
 			document.body.appendChild( element );
 
 			loadConfig( function(config) {
-
-				if( config == null ) {
+				if( config == null || config.version < VERSION ) {
+					trace( 'First start of new fubar version: '+VERSION );
+					Storage.clear();
 					config = {
-						version: App.VERSION,
+						version: VERSION,
 						rating: null,
-						limit: 100,
+						limit: 300,
 						autoplay: 7,
 						maxGifSize: (isMobile ? 2 : 3) * 1024 * 1024,
 					}
 					saveConfig();
 				}
-
 				init( element, config );
 			});
 		}

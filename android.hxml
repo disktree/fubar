@@ -3,5 +3,5 @@ core.hxml
 -D mobile
 -D touch_device
 -D out=../fubar-android/assets
--debug
-#--no-traces
+--no-traces
+#-debug

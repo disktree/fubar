@@ -40,7 +40,7 @@ class Player {
 	public var backgroundColor(default,set) : String;
 	inline function set_backgroundColor( v : String ) return backgroundColor = element.style.backgroundColor = v;
 
-	var background : DivElement;
+	//var background : DivElement;
     var currentView : ItemView;
 	var nextView : ItemView;
 	var preloader : ImagePreloader;
@@ -59,9 +59,9 @@ class Player {
 
         index = 0;
 
-		background = document.createDivElement();
-        background.classList.add( 'background' );
-        element.appendChild( background );
+		//background = document.createDivElement();
+        //background.classList.add( 'background' );
+        //element.appendChild( background );
 
         container = document.createDivElement();
         container.classList.add( 'media' );
@@ -88,16 +88,22 @@ class Player {
             return;
         }
 
+		var item = items[i];
+		if( item == null ) {
+			trace( 'item == null', 'error' );
+			return;
+		}
+
+		//if( item.images.original.size > )
+
         var isNext = this.index+1 == i;
         var isPrev = this.index-1 == i;
 
-        this.index = i;
+        //var item = items[index];
 
-        trace( 'goto $index' );
+		trace( 'goto $i' );
 
-        var item = items[index];
-
-		//trace(item);
+		this.index = i;
 
 		if( nextView != null ) {
 			nextView.remove( true );
