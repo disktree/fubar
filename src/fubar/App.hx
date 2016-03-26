@@ -3,6 +3,8 @@ package fubar;
 import js.Browser.console;
 import js.Browser.document;
 import js.Browser.window;
+import js.html.Element;
+import js.html.DivElement;
 import thx.semver.Version;
 import fubar.app.IntroActivity;
 import om.Time;
@@ -28,52 +30,32 @@ typedef State = {
 @:build(fubar.macro.BuildApp.build())
 class App {
 
-	public static inline var VERSION = '3.0.0';
-
 	public static var isMobile(default,null) : Bool;
-	public static var config(default,null) : Config;
+	public static var element(default,null) : Element;
 	public static var service(default,null) : Service;
+	public static var config(default,null) : Config;
 	//public static var state(default,null) : fubar.State;
 
 	static var animationFrameId : Int;
 
-	static inline function init( cfg : Config ) {
+	static inline function init( element : Element, config : Config ) {
 
-		if( cfg == null || cfg.version != VERSION ) {
-			cfg = {
-				version: VERSION,
-				rating: null,
-				limit: 500,
-				autoplay: 7,
-				maxGifSize: (isMobile ? 2 : 3) * 1024 * 1024,
-			}
-			saveConfig();
-		}
+		App.element = element;
+		App.config = config;
 
-		App.config = cfg;
-
-		#if android
-		isMobile = true;
-		#else
-		isMobile = om.System.isMobile();
-		#end
+		trace( App.NAME+'-'+App.PLAFORM+'-'+App.VERSION, 'info' );
 
 		service = new Service( fubar.macro.Build.getGiphyAPIKey() );
 
-		var container = document.createDivElement();
-		container.id = 'fubar';
-		document.body.appendChild( container );
-
-		new fubar.app.IntroActivity().boot( container );
+		//new fubar.app.PlayActivity( trending ).boot( container );
+		new fubar.app.IntroActivity().boot( element );
 
 		#if !chrome
 		window.addEventListener( 'beforeunload', handleBeforeUnload, false );
 		#end
-		window.addEventListener( 'contextmenu', handleContextMenu, false );
 
 		animationFrameId = window.requestAnimationFrame( update );
 	}
-
 
 	static function update( time : Float ) {
 		animationFrameId = window.requestAnimationFrame( update );
@@ -84,33 +66,9 @@ class App {
 		cancelAnimationFrame();
 	}
 
-	/*
-	static function handleVisibilityChange(e) {
-        if( document.hidden ) {
-			//cancelAnimationFrame();
-			//timePauseStart = Time.now();
-        } else {
-			if( timePauseStart > 0 ) {
-				timeStart += Time.now() - timePauseStart;
-				//timeOffset += Time.now() - timePauseStart;
-				//timeOffset += Time.now() - timePauseStart;
-				timePauseStart = 0;
-			}
-            //animationFrameId = window.requestAnimationFrame( update );
-        }
-    }
-	*/
-
-	static function handleContextMenu(e) {
-        #if web
-        e.preventDefault();
-        #end
-    }
-
 	static function handleBeforeUnload(e) {
 		cancelAnimationFrame();
 		saveConfig();
-        //saveState();
     }
 
 	static function cancelAnimationFrame() {
@@ -126,9 +84,48 @@ class App {
 	//static inline function loadState( callback : State->Void ) Storage.get( 'state', callback );
 	//static inline function saveState() Storage.set( 'state', App.state );
 
+	static function main() {
+
+		#if debug
+		haxe.Log.trace = _trace;
+		#end
+
+		isMobile =
+			#if android
+			true;
+			#else
+			om.System.isMobile();
+			#end
+
+		window.onload = function() {
+
+			document.body.innerHTML = '';
+
+			var element = document.createDivElement();
+			element.id = App.NAME;
+			document.body.appendChild( element );
+
+			loadConfig( function(config) {
+
+				if( config == null ) {
+					config = {
+						version: App.VERSION,
+						rating: null,
+						limit: 100,
+						autoplay: 7,
+						maxGifSize: (isMobile ? 2 : 3) * 1024 * 1024,
+					}
+					saveConfig();
+				}
+
+				init( element, config );
+			});
+		}
+	}
+
 	static function _trace( v : Dynamic, ?info : haxe.PosInfos ) {
-		var str = info.fileName+':'+info.lineNumber;
-		str += ': '+v;
+		#if debug
+		var str = info.fileName+':'+info.lineNumber+': '+v;
 		if( info.customParams != null && info.customParams.length > 0 ) {
 			switch info.customParams[0] {
 				case 'log': console.log( str );
@@ -141,17 +138,6 @@ class App {
 		} else {
 			console.log( str );
 		}
-	}
-
-	static function main() {
-
-		#if debug
-		haxe.Log.trace = _trace;
 		#end
-
-		window.onload = function() {
-			document.body.innerHTML = '';
-			loadConfig( init );
-		}
 	}
 }

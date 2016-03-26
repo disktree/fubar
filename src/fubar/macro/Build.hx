@@ -39,6 +39,31 @@ class Build<T:Config> {
 	public static var platform(default,null) : String;
 	public static var out(default,null) : String;
 
+	static var instance : Build<Dynamic>;
+
+	public static function getConfig() {
+		return instance.config;
+	}
+
+	static function project() {
+
+		platform =
+			#if android 'android'
+			#elseif chrome 'chrome'
+			#elseif web 'web'
+			#else throw 'no platform specified'
+			#end;
+
+		out = Context.definedValue( 'out' );
+		if( out == null ) out = '$OUT/'+platform;
+
+		var config = om.Hxon.read( 'project.hxon' );
+		Reflect.setField( config, platform, true );
+
+		instance = new Build();
+		instance.app( config );
+    }
+
 	public var config(default,null) : T;
 
 	function new() {}
@@ -104,24 +129,6 @@ class Build<T:Config> {
 		if( e.length > 0 )
 			Context.error( e.toString(), Context.currentPos() );
 	}
-
-	static function project() {
-
-		platform =
-			#if android 'android'
-			#elseif chrome 'chrome'
-			#elseif web 'web'
-			#else throw 'no platform specified'
-			#end;
-
-		out = Context.definedValue( 'out' );
-		if( out == null ) out = '$OUT/'+platform;
-
-		var config = om.Hxon.read( 'project.hxon' );
-		Reflect.setField( config, platform, true );
-
-		new Build().app( config );
-    }
 
 	#end
 
