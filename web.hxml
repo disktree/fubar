@@ -1,10 +1,6 @@
--D platform=web
+core.hxml
+-D web
 -D desktop
 -D mobile
 -D touch_device
-#-debug
-core.hxml
--lib closure
--D closure_advanced
--D closure_prettyprint
--D closure_overwrite
+-debug

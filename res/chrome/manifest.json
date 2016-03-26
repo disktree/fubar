@@ -1,11 +1,11 @@
 {
+	"manifest_version": 2,
     "name": "FUbar",
+	"short_name": "FUbar",
     "version": "::version::",
-    "description": "Animated GIF Television",
-    "manifest_version": 2,
-    "minimum_chrome_version": "49",
+    ::if description::"description": "::description::",::end::
     "offline_enabled": false,
-    "short_name": "FUbar",
+	"minimum_chrome_version": "49",
     "app": {
         "background": { "scripts": ["background.js"] }
     },
@@ -21,6 +21,3 @@
         "128": "icon/fubar-128.png"
     }
 }
-::if chrome::
-CHROM
-::end::

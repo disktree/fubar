@@ -4,11 +4,12 @@
 -cp ../../lib/om.app/src
 -cp ../../lib/om.core/src
 -cp ../../lib/om.html/src
+-cp ../../lib/om.hxon/src
 -cp ../../lib/om.io/src
 -cp ../../lib/om.input/src
 -cp ../../lib/om.web/src
 -main fubar.App
 -dce full
 -D name=fubar
--D version=3.0.0-alpha.4
---macro fubar.macro.Build.app()
+-D version=3.0.1
+--macro fubar.macro.Build.project()

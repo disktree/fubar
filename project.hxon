@@ -1,0 +1,17 @@
+{
+	name: "fubar",
+	version: "3.1.0",
+
+	description: 'Animated GIF Television Channel',
+	language: "en",
+	developer: { name: "disktree", url: "http://disktree.net" },
+	window : {
+		title: 'FUbar',
+		color: '#000',
+		orientation: "landscape",
+		fullscreen: "true",
+	},
+
+	debug: true,
+	release: false
+}

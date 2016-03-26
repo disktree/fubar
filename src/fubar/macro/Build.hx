@@ -4,14 +4,28 @@ package fubar.macro;
 import haxe.macro.Compiler;
 import haxe.macro.Context;
 import haxe.macro.Expr;
-import sys.io.File;
+import sys.io.File.*;
 import sys.FileSystem.*;
-import om.io.FileSync;
+import om.io.FileSync.*;
 import Sys.println;
 using haxe.io.Path;
 #end
 
-class Build {
+typedef Window = Dynamic;
+
+typedef Config = {
+
+	var name : String;
+	var version : String;
+
+	var debug : Bool;
+	var release : Bool;
+
+	@:optional var window : Window;
+	@:optional var description : String;
+};
+
+class Build<T:Config> {
 
 	macro public static function getGiphyAPIKey() {
 		var key = StringTools.trim( sys.io.File.getContent( 'GIPHY_API_KEY' ) );
@@ -20,95 +34,63 @@ class Build {
 
 	#if macro
 
-	static inline var OUT = 'out';
+	public static inline var OUT = 'out';
 
-	//static var context : Context;
+	public static var platform(default,null) : String;
+	public static var out(default,null) : String;
 
-	var name : String;
-	var version : String;
-    var platform : String;
-	var debug : Bool;
-	var out : String;
+	public var config(default,null) : T;
 
-	function new() {
+	function new() {}
 
-		name = Context.definedValue( 'name' );
-		version = Context.definedValue( 'version' );
+	function app( config : T ) {
 
-		//platform = Context.definedValue( 'platform' );
-		platform = Context.definedValue( 'platform' );
-		/*
-			#if android 'android'
-			#elseif chrome 'chrome'
-			#elseif web 'web'
-			#else throw 'no platform specified'
-			#end;
-			*/
+		this.config = config;
 
-		if( platform == null ) {
-			Context.error( 'No platform specified', Context.currentPos() );
-		}
-
-		Compiler.define( platform, '1' );
-
-		debug = Context.definedValue( "debug" ) == "1";
-
-		out = Context.definedValue( 'out' );
-		if( out == null ) out = '$OUT/$platform';
-	}
-
-	function start() {
-
-		Compiler.setOutput( '$out/$name.js' );
+		Compiler.setOutput( '$out/${config.name}.js' );
 
 		Context.onAfterGenerate(function(){
 
-			FileSync.syncDirectory( 'res/font', '$out/font' );
-			FileSync.syncDirectory( 'res/image', '$out/image' );
+			syncDirectory( 'res/font', '$out/font' );
+			syncDirectory( 'res/image', '$out/image' );
 
-			lessc( 'fubar-$platform', name );
+			lessc( config.name+'-'+platform, config.name );
 
 			syncTemplate( 'res/html/index.html', '$out/index.html' );
-
-			/*
-			switch platform {
-				case 'android':
-				case 'chrome':
-				case 'web':
-			}
-			*/
 
 			#if android
 
 			#elseif chrome
-			FileSync.syncDirectory( 'res/icon', '$out/icon' );
-			FileSync.syncFile( 'res/chrome/background.js', '$out/background.js' );
+			syncDirectory( 'res/icon', '$out/icon' );
+			syncFile( 'res/chrome/background.js', '$out/background.js' );
 			syncTemplate( 'res/chrome/manifest.json', '$out/manifest.json' );
 
 			#elseif web
-			FileSync.syncDirectory( 'res/icon', '$out/icon' );
+			syncDirectory( 'res/icon', '$out/icon' );
 			syncTemplate( 'res/web/manifest.json', '$out/manifest.json' );
 
 			#end
 
-			println( '$name-$version-$platform' );
+			println( config.name +'-'+platform+'-'+config.version );
 		});
 	}
 
 	function syncTemplate( src : String, dst : String ) {
-		if( !exists( src ) || isDirectory( src ) || !FileSync.needsUpdate( src, dst ) )
+
+		if( !exists( src ) || isDirectory( src ) || !needsUpdate( src, dst ) )
 			return false;
+
 		var dir = dst.directory();
 		if( !exists( dir ) ) createDirectory( dir );
-		var html = new haxe.Template( File.getContent( src ) ).execute( this );
-		File.saveContent( dst, html );
+		var html = new haxe.Template( getContent( src ) ).execute( config );
+		saveContent( dst, html );
+
 		return true;
 	}
 
-	function lessc( srcName : String, ?dstName : String ) {
+	function lessc( srcName : String, ?dstName : String, debug = false ) {
 
 		if( dstName == null ) dstName = srcName;
-
 		var srcPath = 'res/style/$srcName.less';
 		var dstPath = '$out/$dstName.css';
 
@@ -123,9 +105,22 @@ class Build {
 			Context.error( e.toString(), Context.currentPos() );
 	}
 
-	static function app() {
-		var build = new Build();
-		build.start();
+	static function project() {
+
+		platform =
+			#if android 'android'
+			#elseif chrome 'chrome'
+			#elseif web 'web'
+			#else throw 'no platform specified'
+			#end;
+
+		out = Context.definedValue( 'out' );
+		if( out == null ) out = '$OUT/'+platform;
+
+		var config = om.Hxon.read( 'project.hxon' );
+		Reflect.setField( config, platform, true );
+
+		new Build().app( config );
     }
 
 	#end

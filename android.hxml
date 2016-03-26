@@ -1,10 +1,7 @@
--D platform=android
+core.hxml
+-D android
 -D mobile
 -D touch_device
 -D out=../fubar-android/assets
-core.hxml
-#-lib closure
-#-D closure_advanced
-#-D closure_prettyprint
-#-D closure_overwrite
---no-traces
+-debug
+#--no-traces
