@@ -8,7 +8,6 @@ import om.Time.now;
 import om.api.Giphy;
 import fubar.gui.Player;
 import fubar.gui.TouchInput;
-import fubar.gui.Tetroid;
 import fubar.gui.player.Controls;
 import fubar.gui.player.ControlMenuMode;
 import fubar.App.config;
@@ -40,6 +39,7 @@ class PlayActivity extends om.app.Activity {
 
         player = new Player();
         element.append( player.element );
+		//player.scaleMode = fit;
 
 		//preloader = document.createDivElement();
 		//preloader.classList.add( 'loader' );
@@ -64,6 +64,7 @@ class PlayActivity extends om.app.Activity {
 		timePauseStart = 0;
 
 		player.onView = function(item){
+			player.resize( window.innerWidth, window.innerHeight );
 			timeLastImageChange = now();
 			controls.share.item = item;
 		}
@@ -154,6 +155,7 @@ class PlayActivity extends om.app.Activity {
 
 		player.element.removeEventListener( 'dblclick', handleDoubleClickPlayer );
         window.removeEventListener( 'keydown', handleKeyDown );
+        window.removeEventListener( 'resize', handleWindowResize );
 		document.removeEventListener( 'visibilitychange', handleVisibilityChange );
     }
 
@@ -219,8 +221,7 @@ class PlayActivity extends om.app.Activity {
 			if( n > 0 ) trace( n+' items filtered' );
 			player.load( items );
 			*/
-			trace( (items.length-filteredItems.length)+' items filtered' );
-			trace(filteredItems.length);
+			trace( 'loading '+filteredItems.length+' items ('+(items.length-filteredItems.length)+' filtered)' );
 			player.load( filteredItems );
 		}
 	}
@@ -268,6 +269,10 @@ class PlayActivity extends om.app.Activity {
 			//player.next();
         }
     }
+
+	function handleWindowResize(e) {
+		player.resize( window.innerWidth, window.innerHeight );
+	}
 
 	function handleVisibilityChange(e) {
         if( document.hidden ) {

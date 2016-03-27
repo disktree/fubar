@@ -1,6 +1,8 @@
 
 //@import "/home/tong/dev/lib/om.style/res/style/vignette";
 @import "../../../../lib/om.style/res/style/normalize";
+@import "../../../../lib/om.style/res/style/animation/animation";
+@import "../../../../lib/om.style/res/style/animation/attention_seekers/all";
 @import "../../../../lib/om.style/res/style/loader/loader";
 @import "../../../../lib/om.style/res/style/loader/ball-rotate";
 
@@ -125,8 +127,8 @@ input[type="search"]::-webkit-search-results-decoration {
         top: 50%;
         left: 50%;
         transform: translate(-50%,-50%);
-        max-width: 640px;
-        max-height: 60%;
+        max-width: 400px;
+        max-height: 40%;
         animation: fadeOut 0.3s ease-out 2.5s 1 both;
     }
 }
@@ -191,14 +193,50 @@ input[type="search"]::-webkit-search-results-decoration {
 
 			img {
 				position: absolute;
-				width: 100%;
-				height: 100%;
+				//width: 100%;
+				//height: 100%;
 				border: none;
 				-webkit-user-select: none;
+				//background: #ff0000;
             }
 
 			img.gif {
 				display: none;
+			}
+			img.gif.original {
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%,-50%);
+			}
+			img.gif.fit {
+				width: 100%;
+				height: 100%;
+			}
+			img.gif.full-width {
+				top: 50%;
+				width: 100%;
+				height: auto;
+				transform: translate(0,-50%);
+			}
+			img.gif.full-height {
+				left : 50%;
+				width: auto;
+				height: 100%;
+				transform: translate(-50%,0);
+			}
+			img.gif.letterbox {
+
+				min-width: auto;
+    			height: 100%;
+
+				min-height: auto;
+    			height: 100%;
+
+				//min-width: 100%;
+    			//height: auto;
+
+				left: 50%;
+				transform: translate(-50%,0);
 			}
             img.still {
 				//display: none;
@@ -391,7 +429,7 @@ input[type="search"]::-webkit-search-results-decoration {
 .statusbar {
 
 	position: absolute;
-	bottom: 0;
+	top: 0;
 	left: 0;
 	right: 0;
 
@@ -401,7 +439,7 @@ input[type="search"]::-webkit-search-results-decoration {
 	max-height: 1px;
 
 	background: @c-1;
-	opacity: 0.6;
+	opacity: 0.7;
 	//mix-blend-mode: difference;
 
 	z-index: 103;
@@ -414,33 +452,54 @@ input[type="search"]::-webkit-search-results-decoration {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+.eye-shadow( @d:10px, @blur:20px, @color:rgba(0,0,0,0.5) ) {
+	-webkit-filter:
+		drop-shadow( @d @d @blur @color )
+		drop-shadow( -@d -@d @blur @color );
+}
+
 #about.activity {
 
 	overflow: hidden;
 
 	canvas {
+
 		z-index: 1;
-		width:100%;
-		height: 100%;
+
 		position: absolute;
 		top: 0;
 		right: 0;
 		bottom: 0;
 		left: 0;
+
+		//width:100%;
+		//height: 100%;
 		//.vignette(20px,20px,40px,rgba(0,0,0,0.9));
 		//box-shadow: 20px 20px 30px rgba(0,0,0,0.9) inset;
 	}
 
-	img {
-		z-index: 2;
-		position: absolute;
-		top: 50%;
-        left: 50%;
-        transform: translate(-50%,-50%);
-        max-width: 640px;
-        max-height: 60%;
-        //animation: fadeIn 0.2s ease-out 2.0s 1 both;
-	//	box-shadow: 20px 20px 50px rgba(0,0,0,0.4);
+	.symbol {
+
+		//animation-duration: 1s;
+		//animation-fill-mode: both;
+		//animation-iteration-count: infinite;
+		//animation-name: flash;
+
+		img {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%,-50%) scale(0.2,0.2) ;
+		}
+
+		img.pyramide {
+			z-index: 2;
+			.eye-shadow(50px,70px,rgba(0,0,0,0.4));
+		}
+
+		img.eye {
+			z-index: 3;
+		}
 	}
 
 	/*
@@ -478,7 +537,7 @@ input[type="search"]::-webkit-search-results-decoration {
     bottom: 0;
     left: 0;
 
-	.vignette( 70px, 70px, 170px, rgba(0,0,0,0.5) );
+	.vignette( 70px, 70px, 170px, rgba(0,0,0,0.3) );
 
     z-index: 5;
 }

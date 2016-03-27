@@ -12,11 +12,6 @@ import om.api.Giphy;
 import fubar.net.ImagePreloader;
 import fubar.gui.player.*;
 
-enum ScaleMode {
-	fit;
-	letterbox;
-}
-
 class Player {
 
     public dynamic function onView( item : om.api.Giphy.Item ) {}
@@ -30,9 +25,9 @@ class Player {
 
 	public var scaleMode(default,set)  : ScaleMode;
 	inline function set_scaleMode( m : ScaleMode ) {
-		switch m {
-		case fit:
-		case letterbox:
+		trace(m);
+		if( currentView != null ) {
+			//currentView.scaleMode = m;
 		}
 		return scaleMode = m;
 	}
@@ -69,6 +64,13 @@ class Player {
 
 		preloader = new ImagePreloader();
     }
+
+	public function resize( width : Int, height : Int ) {
+		if( currentView != null ) {
+
+			//currentView.resize( width, height, letterbox );
+		}
+	}
 
     public function load( items : Array<om.api.Giphy.Item>, index = 0, ?pagination : Pagination ) {
 
@@ -109,11 +111,13 @@ class Player {
 			nextView.remove( true );
 		}
 
-        nextView = new ItemView( item );
+        nextView = new ItemView( item, letterbox );
 		nextView.onLoadProgress = function(bytes,total){
 
 		}
         nextView.onLoad = function(){
+
+			nextView.gif.classList.add('full-width');
 
 			nextView = null;
 

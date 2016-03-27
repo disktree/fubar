@@ -1,6 +1,7 @@
 package fubar.gui.player;
 
 import js.Browser.document;
+import js.Browser.window;
 import js.html.DivElement;
 import js.html.ImageElement;
 import fubar.net.ImageLoader;
@@ -17,11 +18,47 @@ class ItemView {
     public var element(default,null) : DivElement;
     public var gif(default,null) : ImageElement;
 
+	/*
+	public var scaleMode(default,set)  : ScaleMode;
+	inline function set_scaleMode( m : ScaleMode ) {
+		trace(m);
+			switch m {
+			case original:
+				gif.style.width = gif.width+'px';
+				gif.style.height = gif.height+'px';
+				gif.style.transform = 'translate( '+(window.innerWidth/2-gif.width/2)+'px, '+(window.innerHeight/2-gif.height/2)+'px)';
+			case fit:
+				gif.style.width = window.innerWidth+'px';
+				gif.style.height = window.innerHeight+'px';
+				gif.style.transform = '';
+			case full:
+				var scaleFactorWidth = window.innerWidth / gif.width;
+				var scaleFactorHeight = window.innerHeight / gif.height;
+				var scaleFactor = (scaleFactorWidth < scaleFactorHeight) ? scaleFactorHeight : scaleFactorWidth;
+				var scaledWidth = Std.int( gif.width * scaleFactor );
+				var scaledheight = Std.int( gif.height * scaleFactor );
+				gif.style.width = scaledWidth+'px';
+				gif.style.height = scaledheight+'px';
+				gif.style.transform = 'translate( '+(window.innerWidth/2-scaledWidth/2)+'px, '+(window.innerHeight/2-scaledheight/2)+'px)';
+			case letterbox:
+				var scaleFactorWidth = window.innerWidth / gif.width;
+				var scaleFactorHeight = window.innerHeight / gif.height;
+				var scaleFactor = (scaleFactorWidth > scaleFactorHeight) ? scaleFactorHeight : scaleFactorWidth;
+				var scaledWidth = Std.int( gif.width * scaleFactor );
+				var scaledheight = Std.int( gif.height * scaleFactor );
+				gif.style.width = scaledWidth+'px';
+				gif.style.height = scaledheight+'px';
+				gif.style.transform = 'translate( '+(window.innerWidth/2-scaledWidth/2)+'px, '+(window.innerHeight/2-scaledheight/2)+'px)';
+			}
+		return scaleMode = m;
+	}
+	*/
+
     var still : ImageElement;
 	var loader : ImageLoader;
 	//var caption : DivElement;
 
-    public function new( item : om.api.Giphy.Item ) {
+    public function new( item : om.api.Giphy.Item, scaleMode : ScaleMode ) {
 
         element = document.createDivElement();
         element.classList.add( 'item', 'inc' );
@@ -40,10 +77,16 @@ class ItemView {
         gif = document.createImageElement();
         gif.classList.add( 'gif' );
 		gif.onload = function(){
+
 			//still.style.display = 'none';
+
+			//resize();
+
 			gif.style.display = 'inline-block';
             gif.classList.add( 'playing' );
             onLoad();
+
+
         }
         element.appendChild( gif );
 
@@ -90,6 +133,39 @@ class ItemView {
         loader.load( item.images.original.url );
 		*/
     }
+
+	/*
+	public function resize( width : Int, height : Int, scaleMode : ScaleMode ) {
+		switch scaleMode {
+		case original:
+			gif.style.width = gif.width+'px';
+			gif.style.height = gif.height+'px';
+			gif.style.transform = 'translate( '+(window.innerWidth/2-gif.width/2)+'px, '+(window.innerHeight/2-gif.height/2)+'px)';
+		case fit:
+			gif.style.width = window.innerWidth+'px';
+			gif.style.height = window.innerHeight+'px';
+			gif.style.transform = '';
+		case full:
+			var scaleFactorWidth = window.innerWidth / gif.width;
+			var scaleFactorHeight = window.innerHeight / gif.height;
+			var scaleFactor = (scaleFactorWidth < scaleFactorHeight) ? scaleFactorHeight : scaleFactorWidth;
+			var scaledWidth = Std.int( gif.width * scaleFactor );
+			var scaledheight = Std.int( gif.height * scaleFactor );
+			gif.style.width = scaledWidth+'px';
+			gif.style.height = scaledheight+'px';
+			gif.style.transform = 'translate( '+(window.innerWidth/2-scaledWidth/2)+'px, '+(window.innerHeight/2-scaledheight/2)+'px)';
+		case letterbox:
+			var scaleFactorWidth = window.innerWidth / gif.width;
+			var scaleFactorHeight = window.innerHeight / gif.height;
+			var scaleFactor = (scaleFactorWidth > scaleFactorHeight) ? scaleFactorHeight : scaleFactorWidth;
+			var scaledWidth = Std.int( gif.width * scaleFactor );
+			var scaledheight = Std.int( gif.height * scaleFactor );
+			gif.style.width = scaledWidth+'px';
+			gif.style.height = scaledheight+'px';
+			gif.style.transform = 'translate( '+(window.innerWidth/2-scaledWidth/2)+'px, '+(window.innerHeight/2-scaledheight/2)+'px)';
+		}
+	}
+	*/
 
     public function remove( immediately = false ) {
 		//loader.abort();

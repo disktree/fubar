@@ -1,5 +1,7 @@
 
-## 3.1.0
+## 
+
+## 3.2.0
  * Hxon file as app/build configuration
  * Optional image preload worker
 

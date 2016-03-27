@@ -9,7 +9,6 @@ import thx.semver.Version;
 import fubar.app.IntroActivity;
 import om.Time;
 import om.api.Giphy;
-import fubar.app.ItemActivity;
 
 typedef Config = {
 	var version : String;
@@ -49,6 +48,7 @@ class App {
 
 		//new fubar.app.PlayActivity( trending ).boot( container );
 		new fubar.app.IntroActivity().boot( element );
+		//new fubar.app.AboutActivity().boot( element );
 
 		#if !chrome
 		window.addEventListener( 'beforeunload', handleBeforeUnload, false );
@@ -124,6 +124,13 @@ class App {
 	}
 
 	static function _trace( v : Dynamic, ?info : haxe.PosInfos ) {
+
+		console.log("FUbar");
+		console.debug("FUbar");
+		console.info("FUbar");
+		console.warn("FUbar");
+		console.error("FUbar");
+
 		#if debug
 		var str = info.fileName+':'+info.lineNumber+': '+v;
 		if( info.customParams != null && info.customParams.length > 0 ) {

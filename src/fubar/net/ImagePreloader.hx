@@ -35,7 +35,7 @@ class ImagePreloader {
 		}
 	}
 
-	public function preload( url : String, ?onResult : Error->Void, useWorker = false ) {
+	public function preload( url : String, ?onResult : Error->Void, useWorker = true ) {
 
 		if( map.exists( url ) ) {
 			trace( 'already preloaded: '+url, 'warn' );
@@ -51,6 +51,27 @@ class ImagePreloader {
 
 		} else {
 
+			/*
+			var req = untyped fetch( url );
+			req.then( function(res) return res.blob() ).then(function(res){
+				trace(res);
+			});
+			*/
+
+			/*
+			untyped __js__('window.fetch( url )
+				.then(function(res){
+					console.log(res);
+					return res.blob();
+				}).then(function(r){
+					console.log(r);
+					var objectURL = URL.createObjectURL(r);
+					console.log(objectURL);
+				}).catch(function(e){
+					console.log(e);
+				})');
+				*/
+
 			var xhr = new XMLHttpRequest();
 			map.set( url, xhr );
 			numActivePreloads++;
@@ -63,11 +84,9 @@ class ImagePreloader {
 				if( onResult != null ) onResult( null );
 				//onComplete( untyped window.URL.createObjectURL( xhr.response ) );
 			};
-			/*
-			xhr.onprogress = function(e){
-			onProgress( e.total, e.loaded );
-			};
-			*/
+			//xhr.onprogress = function(e){
+			//onProgress( e.total, e.loaded );
+			//};
 			xhr.onerror = function(e){
 				map.remove( url );
 				numActivePreloads--;
