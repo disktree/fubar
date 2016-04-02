@@ -19,7 +19,7 @@ class Storage {
 
         #else
         var item = storage.getItem( PREFIX + id );
-        callback( (item == null) ? null : Json.parse( item ) );
+        callback( (item == null || item == js.Lib.undefined || item == 'undefined' ) ? null : Json.parse( item ) );
 
         #end
     }
