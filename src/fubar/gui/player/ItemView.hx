@@ -119,6 +119,9 @@ class ItemView {
 		*/
 
 		/*
+		*/
+
+		/*
 		loader = new fubar.net.ImageLoader();
         loader.onProgress = function(t,l) {
             //var percent = l/t*100;

@@ -46,12 +46,12 @@ class App {
 
 		service = new Service( fubar.macro.Build.getGiphyAPIKey() );
 
-		//new fubar.app.PlayActivity( trending ).boot( container );
 		new fubar.app.IntroActivity().boot( element );
+		//new fubar.app.PlayActivity( trending ).boot( element );
 		//new fubar.app.AboutActivity().boot( element );
 
 		#if !chrome
-		window.addEventListener( 'beforeunload', handleBeforeUnload, false );
+		//window.addEventListener( 'beforeunload', handleBeforeUnload, false );
 		#end
 
 		animationFrameId = window.requestAnimationFrame( update );
@@ -84,53 +84,7 @@ class App {
 	//static inline function loadState( callback : State->Void ) Storage.get( 'state', callback );
 	//static inline function saveState() Storage.set( 'state', App.state );
 
-	static function main() {
-
-		#if debug
-		haxe.Log.trace = _trace;
-		#end
-
-		trace( '$NAME-$PLAFORM-$VERSION', 'info' );
-
-		isMobile =
-			#if android true;
-			#else om.System.isMobile();
-			#end
-
-		window.onload = function() {
-
-			document.body.innerHTML = '';
-
-			var element = document.createDivElement();
-			element.id = App.NAME;
-			document.body.appendChild( element );
-
-			loadConfig( function(config) {
-				if( config == null || config.version < VERSION ) {
-					trace( 'First start of new fubar version: '+VERSION );
-					Storage.clear();
-					config = {
-						version: VERSION,
-						rating: null,
-						limit: 300,
-						autoplay: 7,
-						maxGifSize: (isMobile ? 2 : 3) * 1024 * 1024,
-					}
-					saveConfig();
-				}
-				init( element, config );
-			});
-		}
-	}
-
 	static function _trace( v : Dynamic, ?info : haxe.PosInfos ) {
-
-		console.log("FUbar");
-		console.debug("FUbar");
-		console.info("FUbar");
-		console.warn("FUbar");
-		console.error("FUbar");
-
 		#if debug
 		var str = info.fileName+':'+info.lineNumber+': '+v;
 		if( info.customParams != null && info.customParams.length > 0 ) {
@@ -146,5 +100,51 @@ class App {
 			console.log( str );
 		}
 		#end
+	}
+
+	static function main() {
+
+		window.onload = function() {
+
+			#if debug
+			haxe.Log.trace = _trace;
+			#end
+
+			trace( '$NAME-$PLAFORM-$VERSION', 'info' );
+
+			document.body.innerHTML = '';
+
+			isMobile =
+				#if android true;
+				#else om.System.isMobile();
+				#end
+
+			var defaultConfig = {
+				version: VERSION,
+				rating: null,
+				limit: 300,
+				autoplay: 7,
+				maxGifSize: (isMobile ? 2 : 3) * 1024*1024,
+			}
+
+			var element = document.createDivElement();
+			element.id = App.NAME;
+			document.body.appendChild( element );
+
+			loadConfig( function(config) {
+
+				if( config == null )
+					trace( 'FUbar first run '+VERSION, 'info' );
+				else if( config.version < VERSION )
+					trace( 'FUbar version update from '+config.version+' to '+VERSION, 'info' );
+
+				if( config == null || config.version < VERSION ) {
+					config = defaultConfig;
+					saveConfig();
+				}
+
+				init( element, config );
+			});
+		}
 	}
 }

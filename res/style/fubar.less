@@ -12,13 +12,12 @@
 @font: 'Roboto';
 @font-size: 14px;
 
-@controls-opacity: 0.8;
+@controls-opacity: 0.9;
 
 @controls-size-inner: 32px;
 @controls-size-outter: 42px;
 
 ////////////////////////////////////////////////////////////////////////////////
-
 
 @font-face{
 	font-family: 'Roboto';
@@ -119,17 +118,30 @@ input[type="search"]::-webkit-search-results-decoration {
 
     z-index: 1000;
 
-	opacity: 0;
-	animation: fadeIn 0.6s ease-out 0.6s 1 both;
+	//opacity: 0;
 
-    img {
-        position: absolute;
-        top: 50%;
-        left: 50%;
+	img {
+		position: absolute;
+		left: 50%;
+		transform: translate(-50%,-50%);
+	}
+
+    img.title {
+		top: 36%;
+		//animation: fadeIn 0.6s ease-out 0.1s 1 both;
+	}
+
+    img.banner {
+		top: 50%;
         transform: translate(-50%,-50%);
-        max-width: 400px;
-        max-height: 40%;
-        animation: fadeOut 0.3s ease-out 2.5s 1 both;
+        max-width: 200px;
+        max-height: 160px;
+		opacity: 0;
+		animation: fadeIn 0.5s ease-out 0.1s 1 both; // 2.5s ease-out 0.0s 1 both,
+		animation: fadeOut 0.8s ease-out 2.0s 1 both; // 2.5s ease-out 0.0s 1 both,
+		//animation: fadeOut 2.5s; // 2.5s ease-out 0.0s 1 both,
+		//adeOut 0.5s ease-in 2.5s 1 both;
+        //animation: fadeOut 0.3s ease-out 2.5s 1 both;
     }
 }
 
@@ -244,17 +256,19 @@ input[type="search"]::-webkit-search-results-decoration {
 
 			.caption {
 				font-size: 64px;
+				opacity: @controls-opacity;
 			}
 
 			.slug {
 				position: absolute;
-				bottom: 2px;
-				right: 4px;
+				top: 16px;
+				right: 50px;
 				z-index: 103;
 				//background: @c-0;
 				//color: @c-1;
 				text-transform: uppercase;
 				cursor: default;
+				opacity: @controls-opacity;
 			}
         }
         .item.inc {
@@ -329,7 +343,7 @@ input[type="search"]::-webkit-search-results-decoration {
 			float: left;
 			width: @controls-size-inner;
 			height: @controls-size-inner;
-			padding: 6px 10px 6px 10px;
+			padding: 10px 10px 10px 10px;
 			cursor: pointer;
 			opacity: 0.8;
 			transition: opacity 0.2s;
@@ -403,7 +417,6 @@ input[type="search"]::-webkit-search-results-decoration {
 				//.textlabel {}
 			}
 			.option:hover {
-
 			}
 		}
 		.menu.opened {

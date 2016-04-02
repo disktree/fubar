@@ -1,13 +1,14 @@
 -js fubar.js
+-main fubar.App
 -lib thx.semver
 -cp src
 -cp ../../lib/om.app/src
 -cp ../../lib/om.core/src
+-cp ../../lib/om.dom/src
 -cp ../../lib/om.html/src
 -cp ../../lib/om.hxon/src
 -cp ../../lib/om.io/src
 -cp ../../lib/om.input/src
 -cp ../../lib/om.web/src
--main fubar.App
 -dce full
 --macro fubar.macro.Build.project()

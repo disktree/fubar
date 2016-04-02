@@ -142,9 +142,13 @@ class PlayActivity extends om.app.Activity {
 		touchInput.onGesture = handleTouchGesture;
 		//touchInput.onStart = handleTouchStart;
 
-		player.element.addEventListener( 'dblclick', handleDoubleClickPlayer, false );
-		window.addEventListener( 'keydown', handleKeyDown, false );
+        window.addEventListener( 'resize', handleWindowResize, false );
 		document.addEventListener( 'visibilitychange', handleVisibilityChange, false );
+
+        #if desktop
+        player.element.addEventListener( 'dblclick', handleDoubleClickPlayer, false );
+        window.addEventListener( 'keydown', handleKeyDown, false );
+        #end
     }
 
     override function onStop() {
@@ -153,10 +157,13 @@ class PlayActivity extends om.app.Activity {
 
 		touchInput.dispose();
 
-		player.element.removeEventListener( 'dblclick', handleDoubleClickPlayer );
-        window.removeEventListener( 'keydown', handleKeyDown );
         window.removeEventListener( 'resize', handleWindowResize );
 		document.removeEventListener( 'visibilitychange', handleVisibilityChange );
+
+        #if desktop
+        player.element.removeEventListener( 'dblclick', handleDoubleClickPlayer );
+        window.removeEventListener( 'keydown', handleKeyDown );
+        #end
     }
 
 	override function update( time : Float ) {
@@ -265,7 +272,10 @@ class PlayActivity extends om.app.Activity {
         case arrow_down:
         case arrow_left:
             player.prev();
+        case space:
+            controls.play.autoplay = !controls.play.autoplay;
 		default:
+            trace(e.keyCode);
 			//player.next();
         }
     }

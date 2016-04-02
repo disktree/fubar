@@ -2,13 +2,24 @@ package fubar.gui.player;
 
 import js.Browser.document;
 import js.html.ImageElement;
-//import fubar.App.state;
 
 class ControlMenuAutoplay extends ControlMenu {
 
     public dynamic function onChange( autoplay : Bool ) {}
 
-    public var autoplay(default,null) : Bool;
+    public var autoplay(default,set) : Bool;
+    function set_autoplay( v : Bool ) {
+        this.autoplay = v;
+        if( autoplay ) {
+            buttonPlay.style.display = 'none';
+            buttonPause.style.display = 'inline-block';
+        } else {
+            buttonPlay.style.display = 'inline-block';
+            buttonPause.style.display = 'none';
+        }
+        onChange( autoplay );
+        return autoplay;
+    }
 
     var buttonPlay : ImageElement;
     var buttonPause : ImageElement;
@@ -24,7 +35,7 @@ class ControlMenuAutoplay extends ControlMenu {
         //preload = addIconButton( 'preloader' );
         //preload.style.display = 'none';
 
-        set( autoplay );
+        set_autoplay( autoplay );
 
         element.addEventListener( 'click', handleClick, false );
     }
@@ -37,18 +48,8 @@ class ControlMenuAutoplay extends ControlMenu {
     function handleClick(e) {
 		e.stopPropagation();
 		e.preventDefault();
-        set( !autoplay );
+        set_autoplay( !autoplay );
     }
 
-    function set( autoplay : Bool ) {
-        this.autoplay = autoplay;
-        if( autoplay ) {
-            buttonPlay.style.display = 'none';
-            buttonPause.style.display = 'inline-block';
-        } else {
-            buttonPlay.style.display = 'inline-block';
-            buttonPause.style.display = 'none';
-        }
-        onChange( autoplay );
-    }
+
 }

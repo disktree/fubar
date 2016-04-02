@@ -21,11 +21,10 @@ class Player {
 
     public var index(default,null) : Int;
     public var items(default,null) : Array<om.api.Giphy.Item>;
-	public var pagination(default,null)  : Pagination;
+	public var pagination(default,null)  : Pagination;//TODO
 
 	public var scaleMode(default,set)  : ScaleMode;
 	inline function set_scaleMode( m : ScaleMode ) {
-		trace(m);
 		if( currentView != null ) {
 			//currentView.scaleMode = m;
 		}
@@ -42,15 +41,15 @@ class Player {
 
     public function new( ?scaleMode : ScaleMode, backgroundColor = '#000' ) {
 
-		if( scaleMode == null ) {
-			scaleMode = fit;
-		}
+		if( scaleMode == null ) scaleMode = fit;
 
         element = document.createDivElement();
         element.classList.add( 'player' );
 
 		this.scaleMode = scaleMode;
         this.backgroundColor = backgroundColor;
+
+		//trace(this.scaleMode);
 
         index = 0;
 

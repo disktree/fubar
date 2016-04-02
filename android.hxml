@@ -4,7 +4,7 @@ core.hxml
 -D touch_device
 -D out=../fubar-android/assets
 -D clean
---no-traces
+-debug
+#--no-traces
 #-lib closure
 #-D closure_overwrite
-#-debug

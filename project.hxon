@@ -1,6 +1,6 @@
 {
 	name: "fubar",
-	version: "3.2.1",
+	version: "3.3.0",
 
 	description: 'Animated GIF Television Channel',
 	language: "en",
@@ -8,7 +8,7 @@
 	window : {
 		title: 'FUbar',
 		color: '#000',
-		orientation: "landscape",
+		//orientation: "landscape",
 		fullscreen: "true",
 	},
 

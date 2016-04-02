@@ -74,8 +74,7 @@ class ControlMenuShare extends ControlMenu {
 
         super( 'share' );
 
-		isMenuOpen = false;
-		isMouseOver = false;
+		isMenuOpen = isMouseOver = false;
 		timer = new Timer( MENU_TIMEOUT );
 
 		menu = document.createDivElement();
@@ -105,9 +104,11 @@ class ControlMenuShare extends ControlMenu {
 				#end
 			}
 		});
+		optShare.title = 'Share Image';
 
-		optLink = addMenuOption( 'link', function(){});
-		optLink.target = '_blank';
+		//optLink = addMenuOption( 'link', function(){});
+		//optLink.title = '';
+		//optLink.target = '_blank';
 
 		optDownload =
 			#if android
@@ -121,6 +122,8 @@ class ControlMenuShare extends ControlMenu {
 				closeMenu();
 			});
 			#end
+
+		optDownload.title = 'Download Image';
 
 		more = createIconButton( 'more_vert' );
 		more.onclick = toggleMenu;
