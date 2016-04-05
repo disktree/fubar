@@ -27,6 +27,7 @@ class Build #if macro extends om.Build #end {
 		//var platform = om.Build.platform;
 
 		//trace(config);
+		//trace(om.macro.DefineUtil.definedValue( 'less-include-path'));
 
 		syncDirectory( 'res/font', '$out/font' );
 		syncDirectory( 'res/image', '$out/image' );
@@ -37,7 +38,8 @@ class Build #if macro extends om.Build #end {
 		if( !exists( 'res/style/'+lessSrc ) )
 			Context.warning( 'no stylesheet found', Context.currentPos() );
 		else {
-			lessc( lessSrc, config.name + '.css' );
+			var includePaths = om.macro.DefineUtil.definedValue( 'less-include-path' );
+			lessc( lessSrc, config.name + '.css', includePaths );
 		}
 
 		syncTemplate( 'res/html/index.html', '$out/index.html' );
@@ -72,7 +74,7 @@ class Build #if macro extends om.Build #end {
 		return true;
 	}
 
-	function lessc( srcName : String, ?dstName : String ) {
+	function lessc( srcName : String, ?dstName : String, ?includePaths : String ) {
 
 		if( dstName == null ) dstName = srcName;
 		var srcPath = 'res/style/$srcName';
@@ -82,6 +84,9 @@ class Build #if macro extends om.Build #end {
 		if( config.release ) {
 			args.push( '-x' );
 			args.push( '--clean-css' );
+		}
+		if( includePaths != null ) {
+			args.push( '--include-path='+includePaths );
 		}
 		var lessc = new sys.io.Process( 'lessc', args );
 		var e = lessc.stderr.readAll().toString();
