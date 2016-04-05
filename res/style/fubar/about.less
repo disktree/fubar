@@ -1,0 +1,69 @@
+
+.eye-shadow( @d:10px, @blur:20px, @color:rgba(0,0,0,0.5) ) {
+	-webkit-filter:
+		drop-shadow( @d @d @blur @color )
+		drop-shadow( -@d -@d @blur @color );
+}
+
+#about.activity {
+
+	overflow: hidden;
+
+	canvas {
+
+		z-index: 1;
+
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+
+		//width:100%;
+		//height: 100%;
+		//.vignette(20px,20px,40px,rgba(0,0,0,0.9));
+		//box-shadow: 20px 20px 30px rgba(0,0,0,0.9) inset;
+	}
+
+	.symbol {
+
+		//animation-duration: 1s;
+		//animation-fill-mode: both;
+		//animation-iteration-count: infinite;
+		//animation-name: flash;
+
+		img {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%,-50%) scale(0.2,0.2) ;
+		}
+
+		img.pyramide {
+			z-index: 2;
+			.eye-shadow(50px,70px,rgba(0,0,0,0.4));
+		}
+
+		img.eye {
+			z-index: 3;
+		}
+	}
+
+	/*
+	canvas.tetroid {
+		position: fixed;
+	    top: 50%;
+	    right: 50%;
+	    bottom: 50%;
+	    left: 50%;
+		transform: translate(-50%,-50%);
+		z-index: 1000;
+		margin-left: auto;
+    	margin-right: auto;
+		vertical-align: middle;
+		//mix-blend-mode: difference;
+		//background: #0000ff;
+
+	}
+	*/
+}

@@ -1,21 +1,11 @@
 
 //@import "/home/tong/dev/lib/om.style/res/style/vignette";
-@import "../../../../lib/om.style/res/style/normalize";
-@import "../../../../lib/om.style/res/style/animation/animation";
-@import "../../../../lib/om.style/res/style/animation/attention_seekers/all";
-@import "../../../../lib/om.style/res/style/loader/loader";
-@import "../../../../lib/om.style/res/style/loader/ball-rotate";
+@import "normalize";
+@import "/loader/loader";
+@import "/loader/ball-rotate";
 
-@c-0: #000;
-@c-1: #fff;
-
-@font: 'Roboto';
-@font-size: 24px;
-
-@controls-opacity: 0.9;
-
-@controls-size-inner: 32px;
-@controls-size-outter: 42px;
+@import "vars";
+@import "fubar/animations";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -25,7 +15,6 @@
     font-weight: normal;
     font-style: normal;
 }
-
 /*
 @font-face{
 	//font-family: 'Helvetica';
@@ -36,19 +25,7 @@
 }
 */
 
-////////////////////////////////////////////////////////////////////////////////
-
-@keyframes fadeOut {
-    from { opacity: 1; }
-    100% { opacity: 0; }
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    100% { opacity: 1; }
-}
-
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 
 body {
 
@@ -57,8 +34,8 @@ body {
     font-family: @font;
     font-size: @font-size;
 
-    background: @c-0;
-    color: @c-1;
+    background: @color-0;
+    color: @color-1;
 
     -webkit-font-smoothing: antialiased;
 }
@@ -75,7 +52,7 @@ input, select, option {
     font-size: @font-size;
     outline: none;
     border: none;
-    color: @c-1;
+    color: @color-1;
 }
 
 input[type="search"]::-webkit-search-decoration,
@@ -83,485 +60,6 @@ input[type="search"]::-webkit-search-cancel-button,
 input[type="search"]::-webkit-search-results-button,
 input[type="search"]::-webkit-search-results-decoration {
     display: none;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-/*
-@media screen only and (orientation:portrait) {
-	// TODO
-	.player {
-		opacity: 0.2;
-	}
-}
-*/
-
-////////////////////////////////////////////////////////////////////////////////
-
-#splash {
-	display: none;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-#fubar {}
-
-////////////////////////////////////////////////////////////////////////////////
-
-#intro.activity {
-
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-
-    z-index: 1000;
-
-	//opacity: 0;
-
-	img {
-		position: absolute;
-		left: 50%;
-		transform: translate(-50%,-50%);
-	}
-
-    img.title {
-		top: 36%;
-		//animation: fadeIn 0.6s ease-out 0.1s 1 both;
-	}
-
-    img.banner {
-		top: 50%;
-        transform: translate(-50%,-50%);
-        max-width: 200px;
-        max-height: 160px;
-		opacity: 0;
-		animation: fadeIn 0.5s ease-out 0.1s 1 both; // 2.5s ease-out 0.0s 1 both,
-		animation: fadeOut 0.8s ease-out 2.0s 1 both; // 2.5s ease-out 0.0s 1 both,
-
-		//animation: fadeOut 2.5s; // 2.5s ease-out 0.0s 1 both,
-		//adeOut 0.5s ease-in 2.5s 1 both;
-        //animation: fadeOut 0.3s ease-out 2.5s 1 both;
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-@keyframes item_inc {
-    from {
-		opacity: 0;
-		//transform:translate3d(1000px,0,-1000px);
-	}
-    100% {
-		opacity: 1;
-		//transform:translate3d(0,0,0px);
-	}
-}
-@keyframes item_out {
-    from {
-		opacity: 1;
-	}
-    100% {
-		opacity: 0;
-		//transform:translate3d(-1000px,0,-1000px);
-	}
-}
-
-@keyframes item_back_to_init {
-    from {  }
-    100% { left: 0; }
-}
-
-.player {
-
-	z-index: 100;
-
-    position: fixed;
-    top: 0; right: 0; bottom: 0; left: 0;
-
-	.background {
-
-		z-index: 101;
-
-		position: absolute;
-		top: 0; right: 0; bottom: 0; left: 0;
-
-		background: #000;
-	}
-
-    .media {
-
-		z-index: 102;
-
-        position: absolute;
-        width: 100%;
-        height: 100%;
-		perspective: 600px;
-
-        .item {
-
-			position: absolute;
-			width: 100%;
-			height: 100%;
-
-			//-webkit-filter: grayscale(90%);
-			//-webkit-user-select: none;
-
-			/*
-			video {
-				position: absolute;
-				-webkit-user-select: none;
-				top: 50%;
-				width: 100%;
-				height: auto;
-				transform: translate(0,-50%);
-			}
-			*/
-
-			img {
-				position: absolute;
-				border: none;
-				-webkit-user-select: none;
-            }
-
-			img.media {
-				display: none;
-			}
-			img.media.original {
-				top: 50%;
-				left: 50%;
-				transform: translate(-50%,-50%);
-			}
-			img.media.fit {
-				width: 100%;
-				height: 100%;
-			}
-			img.media.full-width {
-				top: 50%;
-				width: 100%;
-				height: auto;
-				transform: translate(0,-50%);
-			}
-			img.media.full-height {
-				left : 50%;
-				width: auto;
-				height: 100%;
-				transform: translate(-50%,0);
-			}
-			img.media.letterbox {
-
-				min-width: auto;
-    			height: 100%;
-
-				min-height: auto;
-    			height: 100%;
-
-				//min-width: 100%;
-    			//height: auto;
-
-				left: 50%;
-				transform: translate3d(-50%,0,150px);
-			}
-
-            img.still {
-				//display: none;
-			}
-
-			.caption {
-				position: absolute;
-				bottom: 8px;
-				left: 10px;
-				z-index: 103;
-				font-size: 64px;
-				opacity: @controls-opacity;
-				-webkit-user-select: none;
-			}
-
-			.slug {
-				position: absolute;
-				bottom: 4px;
-				right: 12px;
-				z-index: 103;
-				font-size: 20px;
-				text-transform: uppercase;
-				cursor: default;
-				opacity: 0.7;
-				//mix-blend-mode: lighten;
-				-moz-user-select: none;
-				-webkit-user-select: none;
-				span {
-				}
-				span:not(:last-child):after {
-					margin: 0 4px;
-					content:"|";
-				}
-			}
-        }
-        //.item.inc_r {
-        .item.inc {
-			opacity: 0;
-            animation: item_inc 0.25s ease-in-out 0.15s 1 both;
-        }
-        .item.out {
-            animation: item_out 0.5s ease-in-out 0s 1 both;
-        }
-		/*
-		.item.back_to_init {
-			//animation: item_back_to_init 1s ease-in-out 0s 1 none;
-		}
-		*/
-
-		/*
-		.item > img.still {
-			display: inline-block;
-		}
-		.item > img.media {
-			display: none;
-		}
-		.item.playing > img.still {
-			display: none;
-		}
-		.item.playing > img.media {
-			display: inline-block;
-		}
-		*/
-    }
-}
-
-/*
-.loader {
-
-	z-index: 150;
-
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	width: 100px;
-	height: 100px;
-
-	.ani {
-		.ball-rotate( 30px, #fff, 1.0s );
-	}
-	//mix-blend-mode: difference;
-}
-*/
-
-.controls {
-
-	z-index: 200;
-
-	position: fixed;
-	right: 0;
-	left: 0;
-
-	//pointer-events: none;
-	//mix-blend-mode: difference;
-
-	.menu {
-
-		z-index: 201;
-		position: fixed;
-		pointer-events: all;
-		opacity: @controls-opacity;
-		transition: transform 0.2s;
-
-		img.button {
-			display: inline-block;
-			float: left;
-			width: @controls-size-inner;
-			height: @controls-size-inner;
-			padding: 10px 10px 10px 10px;
-			transition: opacity 0.2s;
-			cursor: pointer;
-		}
-		img.button:hover {
-			//opacity: 1;
-		}
-	}
-	.menu:hover {
-		opacity: 1;
-	}
-	/*
-	.menu.shown {
-		//animation: item_controls_show 0.2s ease-in-out 0s 1 both;
-		//transform: translate(0,0);
-	}
-	.menu.hidden {
-		//animation: item_controls_hide 0.2s ease-in-out 0s 1 both;
-		//transform: translate(0,100%);
-	}
-	*/
-
-	.menu.autoplay {
-		top: 2px;
-	}
-
-	.menu.mode {
-
-		top: 2px;
-		left: 52px;
-
-		input[type="search"] {
-
-			display: inline-block;
-			float: left;
-			width: 30px;
-			min-width: 30px;
-			max-width: 400px;
-			padding: 10px 0px 7px 2px;
-
-			font-family: Roboto;
-			font-size: @font-size;
-			text-transform: uppercase;
-
-			background: none;
-			opacity: @controls-opacity;
-		}
-
-		.clear {
-			opacity: 1;
-			position: relative;
-			left: -14px;
-			transition: opacity 0.2s;
-		}
-	}
-
-	.menu.share {
-
-		top: 2px;
-		right: 2px;
-
-		.menu {
-
-			position: absolute;
-			top: 44px;
-			//-webkit-user-select: none;
-			//display: none;
-			//opacity: 0;
-			transition: transform 0.3s, opacity 0.3s;
-
-			.option {
-				cursor: pointer;
-				//.icon {}
-				//.textlabel {}
-			}
-			.option:hover {
-			}
-		}
-		.menu.opened {
-			transform: translate(0,0);
-			opacity: @controls-opacity;
-		}
-		.menu.closed {
-			transform: translate(200%,0);
-			opacity: 0;
-		}
-	}
-}
-
-/*
-.controls.shown {
-	//transform: translate(0,0);
-}
-.controls.hidden {
-	//transform: translate(0,100%);
-}
-*/
-
-.statusbar {
-
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-
-	width: 0px;
-	height: 3px;
-	min-height: 1px;
-	max-height: 1px;
-
-	background: @c-1;
-	opacity: 0.7;
-	//mix-blend-mode: difference;
-
-	z-index: 103;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-#play.activity {
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-.eye-shadow( @d:10px, @blur:20px, @color:rgba(0,0,0,0.5) ) {
-	-webkit-filter:
-		drop-shadow( @d @d @blur @color )
-		drop-shadow( -@d -@d @blur @color );
-}
-
-#about.activity {
-
-	overflow: hidden;
-
-	canvas {
-
-		z-index: 1;
-
-		position: absolute;
-		top: 0;
-		right: 0;
-		bottom: 0;
-		left: 0;
-
-		//width:100%;
-		//height: 100%;
-		//.vignette(20px,20px,40px,rgba(0,0,0,0.9));
-		//box-shadow: 20px 20px 30px rgba(0,0,0,0.9) inset;
-	}
-
-	.symbol {
-
-		//animation-duration: 1s;
-		//animation-fill-mode: both;
-		//animation-iteration-count: infinite;
-		//animation-name: flash;
-
-		img {
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%,-50%) scale(0.2,0.2) ;
-		}
-
-		img.pyramide {
-			z-index: 2;
-			.eye-shadow(50px,70px,rgba(0,0,0,0.4));
-		}
-
-		img.eye {
-			z-index: 3;
-		}
-	}
-
-	/*
-	canvas.tetroid {
-		position: fixed;
-	    top: 50%;
-	    right: 50%;
-	    bottom: 50%;
-	    left: 50%;
-		transform: translate(-50%,-50%);
-		z-index: 1000;
-		margin-left: auto;
-    	margin-right: auto;
-		vertical-align: middle;
-		//mix-blend-mode: difference;
-		//background: #0000ff;
-
-	}
-	*/
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -584,3 +82,17 @@ input[type="search"]::-webkit-search-results-decoration {
 
     z-index: 5;
 }
+
+#splash {
+	display: none;
+}
+
+#fubar {}
+
+////////////////////////////////////////////////////////////////////////////////
+
+@import "fubar/intro";
+@import "fubar/play";
+@import "fubar/player";
+@import "fubar/controls";
+@import "fubar/about";
