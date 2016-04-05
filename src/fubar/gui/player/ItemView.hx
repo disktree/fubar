@@ -2,8 +2,10 @@ package fubar.gui.player;
 
 import js.Browser.document;
 import js.Browser.window;
+import js.html.Element;
 import js.html.DivElement;
 import js.html.ImageElement;
+import js.html.VideoElement;
 import fubar.net.ImageLoader;
 
 using StringTools;
@@ -14,9 +16,11 @@ class ItemView {
 
     public dynamic function onLoad() {}
     public dynamic function onLoadProgress( bytes : Int, total : Int ) {}
+	//public dynamic function onSlugSelect( word : String ) {}
 
     public var element(default,null) : DivElement;
-    public var gif(default,null) : ImageElement;
+    //public var gif(default,null) : ImageElement;
+    //public var media(get,null) : Element;
 
 	/*
 	public var scaleMode(default,set)  : ScaleMode;
@@ -54,14 +58,17 @@ class ItemView {
 	}
 	*/
 
+    //var video : VideoElement;
+    var gif : ImageElement;
     var still : ImageElement;
 	var loader : ImageLoader;
-	//var caption : DivElement;
+	var caption : DivElement;
+	var slug : DivElement;
 
-    public function new( item : om.api.Giphy.Item, scaleMode : ScaleMode ) {
+    public function new( item : om.api.Giphy.Item, scaleMode : String ) {
 
         element = document.createDivElement();
-        element.classList.add( 'item', 'inc' );
+        element.classList.add( 'item', 'inc', scaleMode );
         element.addEventListener( 'animationend', function(e) {
             switch e.animationName {
             case 'item_inc':
@@ -75,51 +82,60 @@ class ItemView {
         }, false );
 
         gif = document.createImageElement();
-        gif.classList.add( 'gif' );
+        gif.classList.add( 'media', 'gif' );
 		gif.onload = function(){
-
-			//still.style.display = 'none';
-
+			still.style.display = 'none';
 			//resize();
-
 			gif.style.display = 'inline-block';
-            gif.classList.add( 'playing' );
+        gif.classList.add( 'playing' );
             onLoad();
-
-
         }
         element.appendChild( gif );
-
-		gif.src = item.images.original.url;
 
         still = document.createImageElement();
 		still.onload = function(){
 			still.style.display = 'inline-block';
+			gif.src = item.images.original.url;
 		};
-	//	still.src = item.images.original_still.url;
+		still.src = item.images.original_still.url;
 		//var stillLoader = new fubar.net.ImageLoader();
         //element.appendChild( still );
 
 		/*
-		if( item.caption != null ) {
-			var caption = document.createDivElement();
-			caption.classList.add( 'caption' );
-			caption.textContent = item.caption;
-			element.appendChild( caption );
-		}
+		video = document.createVideoElement();
+		//video.onclick = function(){ trace("cc"); video.play(); }
+		video.classList.add( 'media', 'video' );
+		video.autoplay = true;
+		video.loop = true;
+		video.controls = false;
+		video.src = item.images.original.mp4;
+		element.appendChild( video );
+		*/
 
+		caption = document.createDivElement();
+		caption.classList.add( 'caption' );
+		if( item.caption != null ) {
+			trace(item.caption);
+			caption.textContent = item.caption;
+		}
+		element.appendChild( caption );
+
+		slug = document.createDivElement();
+		slug.classList.add( 'slug' );
 		if( item.slug != null ) {
-			var slug = document.createDivElement();
-			slug.classList.add( 'slug' );
 			var slugs = item.slug.split('-');
 			slugs.pop();
-			slug.textContent = slugs.join(' | ');
-			element.appendChild( slug );
+			for( word in slugs ) {
+				var e = document.createSpanElement();
+				e.onclick = function(){
+					//onSlugSelect( word );
+				}
+				e.textContent = word;
+				slug.appendChild(e);
+			}
+			//slug.textContent = slugs.join(' | ');
 		}
-		*/
-
-		/*
-		*/
+		element.appendChild( slug );
 
 		/*
 		loader = new fubar.net.ImageLoader();

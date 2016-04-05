@@ -103,6 +103,7 @@ class Player {
         //var item = items[index];
 
 		trace( 'goto $i' );
+		//trace( item );
 
 		this.index = i;
 
@@ -110,13 +111,19 @@ class Player {
 			nextView.remove( true );
 		}
 
-        nextView = new ItemView( item, letterbox );
+        nextView = new ItemView( item, 'full-width' );
 		nextView.onLoadProgress = function(bytes,total){
 
 		}
         nextView.onLoad = function(){
 
-			nextView.gif.classList.add('full-width');
+            if( nextView == null ) {
+                return;
+            }
+
+            //nextView.onSlugSelect = function(){
+
+			//nextView.gif.classList.add( 'full-width' );
 
 			nextView = null;
 
@@ -125,6 +132,7 @@ class Player {
             //TODO preload
 			if( isNext && index < items.length-1 ) preload( items[index+1] );
 			if( isPrev && index > 0 ) preload( items[index-1] );
+
         }
         container.appendChild( nextView.element );
 

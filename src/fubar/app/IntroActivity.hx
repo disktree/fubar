@@ -19,7 +19,6 @@ class IntroActivity extends om.app.Activity {
         banner = new ImageElement( 'image/giphy-badge-640.gif' );
 		banner.classList.add( 'banner' );
 		banner.on( 'animationend', function(e:AnimationEvent) {
-			trace(e.animationName);
 			switch e.animationName {
 			case 'fadeIn':
 			case 'fadeOut':

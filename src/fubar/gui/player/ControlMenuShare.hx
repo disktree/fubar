@@ -106,9 +106,9 @@ class ControlMenuShare extends ControlMenu {
 		});
 		optShare.title = 'Share Image';
 
-		//optLink = addMenuOption( 'link', function(){});
-		//optLink.title = '';
-		//optLink.target = '_blank';
+		optLink = addMenuOption( 'link', function(){});
+		optLink.title = '';
+		optLink.target = '_blank';
 
 		optDownload =
 			#if android

@@ -22,8 +22,9 @@ class ControlMenuMode extends ControlMenu {
 
 	//var lastSubmittedSearch : String;
 
-    var trendingButton : ImageElement;
-    var searchButton : ImageElement;
+    var buttonTrending : ImageElement;
+    var buttonRandom : ImageElement;
+    var buttonSearch : ImageElement;
     var searchInput : InputElement;
     var searchClear : ImageElement;
 
@@ -31,8 +32,8 @@ class ControlMenuMode extends ControlMenu {
 
         super( 'mode' );
 
-        trendingButton = addIconButton( 'trending' );
-        trendingButton.onclick = function(_) {
+        buttonTrending = addIconButton( 'trending' );
+        buttonTrending.onclick = function(_) {
 			/*
 			if( lastSubmittedSearch != null ) {
 				//searchInput.value = lastSubmittedSearch;
@@ -42,9 +43,15 @@ class ControlMenuMode extends ControlMenu {
             onChange( PlaySettingsChange.mode( search ) );
         }
 
-        searchButton = addIconButton( 'search' );
-        searchButton.style.display = 'none';
-        searchButton.onclick = function(_) {
+        buttonRandom = addIconButton( 'random' );
+        buttonRandom.onclick = function(_) {
+            setMode( random );
+            onChange( PlaySettingsChange.mode( random ) );
+        }
+
+        buttonSearch = addIconButton( 'search' );
+        buttonSearch.style.display = 'none';
+        buttonSearch.onclick = function(_) {
             setMode( trending );
             onChange( PlaySettingsChange.mode( trending ) );
         }
@@ -70,15 +77,52 @@ class ControlMenuMode extends ControlMenu {
 
     function setMode( mode : PlayMode ) {
 		this.mode = mode;
+        /*
         switch this.mode {
         case trending:
-            trendingButton.style.display = 'inline-block';
-            searchButton.style.display = 'none';
+            buttonTrending.style.opacity = '1';
+            buttonRandom.style.opacity = '0';
+            buttonSearch.style.opacity = '0';
+            searchInput.style.opacity = '0';
+            searchClear.style.opacity = '0';
+
+        case random:
+            buttonTrending.style.opacity = '0';
+            buttonRandom.style.opacity = '1';
+            buttonSearch.style.opacity = '0';
+            searchInput.style.opacity = '0';
+            searchClear.style.opacity = '0';
+
+        case search:
+            buttonTrending.style.opacity = '0';
+            buttonRandom.style.opacity = '0';
+            buttonSearch.style.opacity = '1';
+            searchInput.style.opacity = '1';
+            if( searchInput.value.length == 0 ) {
+                searchClear.style.opacity = '0';
+                searchInput.focus();
+            } else {
+				searchClear.style.opacity = '1';
+            }
+        }
+        */
+
+        /*
+        switch this.mode {
+
+        case trending:
+
+            buttonTrending.style.display = 'inline-block';
+
+            buttonRandom.style.display = 'inline-block';
+
+            buttonSearch.style.display = 'none';
             searchInput.style.display = 'none';
             searchClear.style.opacity = '0';
+
         case search:
-            trendingButton.style.display = 'none';
-            searchButton.style.display = 'inline-block';
+            buttonTrending.style.display = 'none';
+            buttonSearch.style.display = 'inline-block';
             searchInput.style.display = 'inline-block';
             if( searchInput.value.length == 0 ) {
                 searchClear.style.opacity = '0';
@@ -87,6 +131,7 @@ class ControlMenuMode extends ControlMenu {
 				searchClear.style.opacity = '1';
             }
         }
+        */
     }
 
     function setSearchText( text : String ) {

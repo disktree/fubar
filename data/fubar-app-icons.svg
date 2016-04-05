@@ -25,16 +25,16 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="3.0360025"
-     inkscape:cx="1250.7111"
-     inkscape:cy="17.055611"
+     inkscape:zoom="2.6476077"
+     inkscape:cx="1244.9287"
+     inkscape:cy="44.119804"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
-     inkscape:window-width="1920"
-     inkscape:window-height="1061"
-     inkscape:window-x="3046"
-     inkscape:window-y="0"
+     inkscape:window-width="1680"
+     inkscape:window-height="1007"
+     inkscape:window-x="0"
+     inkscape:window-y="24"
      inkscape:window-maximized="1"
      showguides="true"
      inkscape:guide-bbox="true"
@@ -366,5 +366,23 @@
          inkscape:connector-curvature="0"
          style="fill:none" />
     </g>
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.8657881;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect5417-5-0-7-7-8-3-0-3-5-7-6"
+       width="100"
+       height="100"
+       x="1330"
+       y="942.36218"
+       inkscape:export-filename="/home/tong/dev/project/fubar/res/image/ic_random.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       id="path3437"
+       d="m 1369.9375,977.00593 q -2.6249,4.02501 -5.9937,11.94375 -0.9626,-1.96873 -1.6188,-3.17187 -0.6563,-1.20313 -1.7718,-2.77814 -1.1157,-1.57499 -2.2312,-2.47186 -1.1158,-0.89687 -2.7564,-1.53126 -1.6406,-0.63437 -3.5655,-0.63437 l -9.8001,0 q -0.6124,0 -1.0063,-0.39375 -0.3936,-0.39375 -0.3936,-1.00624 l 0,-8.39999 q 0,-0.61251 0.3936,-1.00627 0.3939,-0.39374 1.0063,-0.39374 l 9.8001,0 q 10.9375,0 17.9374,9.84374 z m 49.2624,34.95627 q 0,0.6125 -0.3936,1.0063 l -14,14 q -0.3938,0.3937 -1.0063,0.3937 -0.5687,0 -0.9845,-0.4156 -0.4155,-0.4156 -0.4155,-0.9843 l 0,-8.4002 q -1.4,0 -3.7187,0.022 -2.3188,0.022 -3.5438,0.044 -1.2249,0.022 -3.1937,-0.044 -1.9688,-0.066 -3.1063,-0.2189 -1.1375,-0.153 -2.8,-0.4592 -1.6625,-0.3062 -2.7562,-0.8093 -1.0937,-0.5031 -2.5375,-1.2469 -1.4438,-0.7439 -2.5812,-1.7501 -1.1375,-1.0062 -2.4064,-2.3406 -1.2686,-1.3344 -2.45,-3.0406 2.5813,-4.0688 5.95,-11.94377 0.9626,1.96874 1.6188,3.17188 0.6563,1.20319 1.7719,2.77819 1.1157,1.575 2.2312,2.4718 1.1157,0.897 2.7563,1.5313 1.6405,0.6344 3.5655,0.6344 l 11.2,0 0,-8.4001 q 0,-0.61246 0.3938,-1.00624 0.3937,-0.39373 1.0062,-0.39373 0.5249,0 1.05,0.43749 l 13.9563,13.95618 q 0.3936,0.3939 0.3936,1.0063 z m 0,-39.20001 q 0,0.6125 -0.3936,1.00624 l -14,14.00002 q -0.3938,0.39373 -1.0063,0.39373 -0.5687,0 -0.9845,-0.41563 -0.4155,-0.41564 -0.4155,-0.98436 l 0,-8.40001 -11.2,0 q -2.1,0 -3.8062,0.65626 -1.7063,0.65624 -3.0188,1.96874 -1.3126,1.3125 -2.2312,2.69064 -0.9188,1.37812 -1.9687,3.39065 -1.4001,2.71248 -3.4126,7.48124 -1.2687,2.88748 -2.1656,4.85625 -0.8969,1.96864 -2.3625,4.59374 -1.4656,2.6249 -2.8,4.375 -1.3345,1.75 -3.2375,3.6313 -1.9031,1.8811 -3.9375,2.9968 -2.0344,1.1156 -4.6593,1.8376 -2.6251,0.7217 -5.6,0.7217 l -9.8001,0 q -0.6124,0 -1.0063,-0.3936 -0.3936,-0.3939 -0.3936,-1.0063 l 0,-8.4001 q 0,-0.6124 0.3936,-1.0062 0.3939,-0.3937 1.0063,-0.3937 l 9.8001,0 q 2.0999,0 3.8062,-0.6562 1.7062,-0.6564 3.0188,-1.9689 1.3123,-1.3124 2.2312,-2.6905 0.9187,-1.37814 1.9687,-3.39065 1.4,-2.7125 3.4125,-7.48127 1.2687,-2.88748 2.1655,-4.85624 0.897,-1.96877 2.3624,-4.59376 1.4658,-2.625 2.8002,-4.375 1.3343,-1.75 3.2375,-3.63125 1.9031,-1.88124 3.9375,-2.99686 2.0345,-1.11562 4.6594,-1.8375 2.6251,-0.72188 5.6,-0.72188 l 11.2,0 0,-8.39999 q 0,-0.6125 0.3938,-1.00624 0.3937,-0.39376 1.0062,-0.39376 0.5249,0 1.05,0.4375 l 13.9562,13.95623 q 0.3936,0.39376 0.3936,1.00626 z"
+       inkscape:connector-curvature="0"
+       style="fill:#ffffff"
+       inkscape:export-filename="/home/tong/dev/project/fubar/res/image/ic_random.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
   </g>
 </svg>

@@ -3,6 +3,107 @@ package fubar.macro;
 #if macro
 import haxe.macro.Compiler;
 import haxe.macro.Context;
+import sys.FileSystem.*;
+import sys.io.File.*;
+import om.io.FileUtil;
+import om.io.FileSync.*;
+using haxe.io.Path;
+#end
+
+class Build #if macro extends om.Build #end {
+
+	macro public static function getGiphyAPIKey() {
+		var key = StringTools.trim( sys.io.File.getContent( 'GIPHY_API_KEY' ) );
+		return macro $v{key};
+	}
+
+	#if macro
+
+	public static var _config(default,null) : om.build.Config;
+
+	override function onAfterGenerate() {
+
+		//var out = om.Build.out;
+		//var platform = om.Build.platform;
+
+		//trace(config);
+
+		syncDirectory( 'res/font', '$out/font' );
+		syncDirectory( 'res/image', '$out/image' );
+		syncDirectory( 'res/worker', '$out/worker' );
+
+		var lessSrc = config.name+'-'+platform+'.less';
+		if( !exists( 'res/style/'+lessSrc ) ) lessSrc = config.name+'.less';
+		if( !exists( 'res/style/'+lessSrc ) )
+			Context.warning( 'no stylesheet found', Context.currentPos() );
+		else {
+			lessc( lessSrc, config.name + '.css' );
+		}
+
+		syncTemplate( 'res/html/index.html', '$out/index.html' );
+
+		#if android
+
+		#elseif chrome
+		syncDirectory( 'res/icon', '$out/icon' );
+		syncFile( 'res/chrome/background.js', '$out/background.js' );
+		syncTemplate( 'res/chrome/manifest.json', '$out/manifest.json' );
+
+		#elseif web
+		syncDirectory( 'res/icon', '$out/icon' );
+		syncTemplate( 'res/web/manifest.json', '$out/manifest.json' );
+
+		#end
+
+		Sys.println( config.name +'-'+platform+'-'+config.version );
+    }
+
+	function syncTemplate( src : String, dst : String ) {
+
+		if( !exists( src ) || isDirectory( src ) || !needsUpdate( src, dst ) )
+			return false;
+
+		var dir = dst.directory();
+		if( !exists( dir ) ) createDirectory( dir );
+
+		var html = new haxe.Template( getContent( src ) ).execute( config );
+		saveContent( dst, html );
+
+		return true;
+	}
+
+	function lessc( srcName : String, ?dstName : String ) {
+
+		if( dstName == null ) dstName = srcName;
+		var srcPath = 'res/style/$srcName';
+		var dstPath = '$out/$dstName';
+
+		var args = [ srcPath, dstPath, '--no-color' ];
+		if( config.release ) {
+			args.push( '-x' );
+			args.push( '--clean-css' );
+		}
+		var lessc = new sys.io.Process( 'lessc', args );
+		var e = lessc.stderr.readAll().toString();
+		if( e.length > 0 )
+			Context.error( e.toString(), Context.currentPos() );
+	}
+
+	static function app() {
+
+		_config = om.Hxon.read( 'project.hxon' );
+
+		var build = new fubar.macro.Build();
+		build.start( _config );
+	}
+
+	#end
+}
+
+/*
+#if macro
+import haxe.macro.Compiler;
+import haxe.macro.Context;
 import haxe.macro.Expr;
 import sys.io.File.*;
 import sys.FileSystem.*;
@@ -152,3 +253,4 @@ class Build<T:Config> {
 	#end
 
 }
+*/

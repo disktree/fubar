@@ -70,12 +70,13 @@ class PlayActivity extends om.app.Activity {
 		}
 
 		controls.mode.onChange = function(change:PlaySettingsChange){
-
 			switch change {
 			case PlaySettingsChange.mode(m):
 				switch m {
 				case trending:
 					loadTrendingItems();
+				case random:
+                    //TODO loadRandomItem();
 				case search:
 					var term = controls.mode.searchTerm;
 					if( term.length == 0 ) {
@@ -275,7 +276,7 @@ class PlayActivity extends om.app.Activity {
         case space:
             controls.play.autoplay = !controls.play.autoplay;
 		default:
-            trace(e.keyCode);
+            //trace(e.keyCode);
 			//player.next();
         }
     }

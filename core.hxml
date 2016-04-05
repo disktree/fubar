@@ -3,6 +3,7 @@
 -lib thx.semver
 -cp src
 -cp ../../lib/om.app/src
+-cp ../../lib/om.build/src
 -cp ../../lib/om.core/src
 -cp ../../lib/om.dom/src
 -cp ../../lib/om.html/src
@@ -11,4 +12,4 @@
 -cp ../../lib/om.input/src
 -cp ../../lib/om.web/src
 -dce full
---macro fubar.macro.Build.project()
+--macro fubar.macro.Build.app()

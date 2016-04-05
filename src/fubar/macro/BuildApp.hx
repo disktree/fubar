@@ -10,11 +10,12 @@ class BuildApp {
 
 		var fields = Context.getBuildFields();
 		var pos = Context.currentPos();
-		var config = Build.getConfig();
 
-		//trace( config );
+		var config = fubar.macro.Build._config;
 
-		addConstStringField( fields, 'PLAFORM', Build.platform );
+		trace( config );
+
+		addConstStringField( fields, 'PLAFORM', config.platform );
 		addConstStringField( fields, 'NAME', config.name );
 		addConstStringField( fields, 'VERSION', config.version );
 
