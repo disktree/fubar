@@ -17,28 +17,48 @@ class ControlMenuMode extends ControlMenu {
 
 	public var mode(default,null) : PlayMode;
 
-	public var searchTerm(get,null) : String;
-	inline function get_searchTerm() return searchInput.value;
+	//public var searchTerm(get,null) : String;
+	//inline function get_searchTerm() return searchInput.value;
 
 	//var lastSubmittedSearch : String;
 
     var buttonTrending : ImageElement;
     var buttonRandom : ImageElement;
     var buttonSearch : ImageElement;
-    var searchInput : InputElement;
-    var searchClear : ImageElement;
+    var buttons : Array<ImageElement>;
+
+    //var searchInput : InputElement;
+    //var searchClear : ImageElement;
 
     public function new() {
 
         super( 'mode' );
 
+        //buttons = [];
+
+        /*
+        var addModeButton = function(mode:String){
+            var img = addIconButton( mode );
+            img.onclick = function(){
+                setMode( mode );
+                onChange( PlaySettingsChange.mode( mode ) );
+            }
+            return img;
+        }
+
+        buttonTrending = addModeButton( 'trending' );
+        buttonRandom = addModeButton( 'random' );
+        buttonSearch = addModeButton( 'search' );
+        */
+
+        /*
         buttonTrending = addIconButton( 'trending' );
         buttonTrending.onclick = function(_) {
 			/*
 			if( lastSubmittedSearch != null ) {
 				//searchInput.value = lastSubmittedSearch;
 			}
-			*/
+			* /
             setMode( search );
             onChange( PlaySettingsChange.mode( search ) );
         }
@@ -64,19 +84,36 @@ class ControlMenuMode extends ControlMenu {
 
         searchClear = addIconButton( 'clear' );
 		searchClear.addEventListener( 'click', handleClearClick, false );
+        */
 
 		setMode( trending );
     }
 
 	public override function dispose() {
 		super.dispose();
-		searchInput.removeEventListener( 'input', handleSearchInput );
-        searchInput.removeEventListener( 'search', handleSearchEnter );
-        searchClear.removeEventListener( 'click', handleClearClick );
+		//searchInput.removeEventListener( 'input', handleSearchInput );
+        //searchInput.removeEventListener( 'search', handleSearchEnter );
+        //searchClear.removeEventListener( 'click', handleClearClick );
 	}
 
     function setMode( mode : PlayMode ) {
 		this.mode = mode;
+        /*
+        switch this.mode {
+        case trending:
+            buttonTrending.classList.add( 'active' );
+            buttonRandom.classList.remove( 'active' );
+            buttonSearch.classList.remove( 'active' );
+        case random:
+            buttonTrending.classList.remove( 'active' );
+            buttonRandom.classList.add( 'active' );
+            buttonSearch.classList.remove( 'active' );
+        case search:
+            buttonTrending.classList.remove( 'active' );
+            buttonRandom.classList.remove( 'active' );
+            buttonSearch.classList.add( 'active' );
+        }
+        */
         /*
         switch this.mode {
         case trending:
@@ -134,6 +171,16 @@ class ControlMenuMode extends ControlMenu {
         */
     }
 
+    /*
+    override function createIconButton( id : String ) : ImageElement {
+        var img = super.addIconButton( id );
+        img.setAttribute( 'data-type', id );
+        //buttons.push( img );
+        return img;
+    }
+    */
+
+    /*
     function setSearchText( text : String ) {
         searchInput.value = text;
         updateSearchInput();
@@ -173,4 +220,5 @@ class ControlMenuMode extends ControlMenu {
 		setSearchText( '' );
 		searchInput.focus();
 	}
+    */
 }

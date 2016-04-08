@@ -11,7 +11,7 @@ class BuildApp {
 		var fields = Context.getBuildFields();
 		var pos = Context.currentPos();
 
-		var config = fubar.macro.Build._config;
+		var config = fubar.macro.Build.config;
 
 		trace( config );
 

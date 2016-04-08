@@ -27,6 +27,7 @@ typedef State = {
 */
 
 @:build(fubar.macro.BuildApp.build())
+//class App implements om.App {
 class App {
 
 	public static var isMobile(default,null) : Bool;
@@ -44,7 +45,8 @@ class App {
 
 		trace( config, 'debug' );
 
-		service = new Service( fubar.macro.Build.getGiphyAPIKey() );
+		//service = new Service( fubar.macro.Build.getGiphyAPIKey() );
+		service = new Service( "dc6zaTOxFJmzC" );
 
 		new fubar.app.IntroActivity().boot( element );
 		//new fubar.app.PlayActivity( trending ).boot( element );
@@ -110,7 +112,7 @@ class App {
 			haxe.Log.trace = _trace;
 			#end
 
-			trace( '$NAME-$PLAFORM-$VERSION', 'info' );
+		//	trace( '$NAME-$PLAFORM-$VERSION', 'info' );
 
 			document.body.innerHTML = '';
 
@@ -120,7 +122,7 @@ class App {
 				#end
 
 			var defaultConfig = {
-				version: VERSION,
+				version: '',//TODO temp! VERSION,
 				rating: null,
 				limit: 300,
 				autoplay: 7,
@@ -128,7 +130,7 @@ class App {
 			}
 
 			var element = document.createDivElement();
-			element.id = App.NAME;
+		//	element.id = App.NAME;
 			document.body.appendChild( element );
 
 			loadConfig( function(config) {

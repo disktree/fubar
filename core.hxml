@@ -12,4 +12,5 @@
 -cp ../../lib/om.input/src
 -cp ../../lib/om.web/src
 -dce full
+-D less-include-path=/home/tong/dev/lib/om.style/res/style/
 --macro fubar.macro.Build.app()

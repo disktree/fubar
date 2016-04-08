@@ -72,6 +72,8 @@ class PlayActivity extends om.app.Activity {
 		controls.mode.onChange = function(change:PlaySettingsChange){
 			switch change {
 			case PlaySettingsChange.mode(m):
+                trace(m);
+                /*
 				switch m {
 				case trending:
 					loadTrendingItems();
@@ -86,6 +88,7 @@ class PlayActivity extends om.app.Activity {
 						loadItems( term.split('') );
 					}
 				}
+                */
 			case PlaySettingsChange.search(term):
 				var terms = ~/(\s+)/.split( term ); //TODO
 				loadItems( terms );

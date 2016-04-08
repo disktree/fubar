@@ -1,5 +1,5 @@
 core.hxml
--D web
+-D platform=web
 -D desktop
 -D mobile
 -D touch_device

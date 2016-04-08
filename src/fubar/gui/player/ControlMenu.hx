@@ -4,6 +4,7 @@ import js.Browser.document;
 import js.Browser.window;
 import js.html.Element;
 import js.html.ImageElement;
+import fubar.widget.IconButton;
 
 /**
     Abstract base class for control groups.
@@ -40,16 +41,19 @@ class ControlMenu {
 	public function dispose() {
 	}
 
-	function addIconButton( id : String ) : ImageElement {
-        var e = createIconButton( id );
-        element.appendChild( e );
-        return e;
+	function addIconButton( id : String ) : IconButton {
+        var img = createIconButton( id );
+        element.appendChild( img );
+        return img;
     }
 
-    function createIconButton( id : String ) : ImageElement {
-        var img = document.createImageElement();
-        img.classList.add( 'button', id );
-        img.src = 'image/ic_$id.png';
-        return img;
+    function createIconButton( id : String ) : IconButton {
+		var btn = new IconButton( id );
+        //var img = document.createImageElement();
+        //img.classList.add( 'button', id );
+        ////img.setAttribute( 'data-type', id );
+        //img.src = 'image/ic_$id.png';
+        //return img;
+    	return btn;
     }
 }
